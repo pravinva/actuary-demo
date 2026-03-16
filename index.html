@@ -394,7 +394,7 @@
                         <h4> Genie Natural Language</h4>
                         <ul>
                             <li>Actuaries ask questions in plain English</li>
-                            <li>No SQL expertise required</li>
+                            <li>Natural language interface for all users</li>
                             <li>Instant self-service analytics</li>
                             <li>Understands domain terminology</li>
                         </ul>
@@ -404,7 +404,7 @@
                         <h4> Embedded Data Quality</h4>
                         <ul>
                             <li>6 DQ expectations in DLT pipeline</li>
-                            <li>Quarantine pattern (don't drop data)</li>
+                            <li>Quarantine pattern preserves data for investigation</li>
                             <li>Detailed audit trail in event log</li>
                             <li>DQ as code (version controlled)</li>
                         </ul>
@@ -414,14 +414,14 @@
                         <h4> Delta Time Travel</h4>
                         <ul>
                             <li>"What did we know when?" for regulators</li>
-                            <li>No need to re-run jobs</li>
+                            <li>Query any prior state instantly</li>
                             <li>Compare estimates over time</li>
                             <li>Automatic versioning</li>
                         </ul>
                     </div>
 
                     <div class="feature-card">
-                        <h4>📈 Production-Ready Analytics</h4>
+                        <h4>Production-Ready Analytics</h4>
                         <ul>
                             <li>Development triangles by product/state</li>
                             <li>Reserve deterioration monitoring (RAG)</li>
@@ -483,8 +483,7 @@
                 <h2> Genie Natural Language Queries</h2>
 
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">
-                    Actuaries can ask questions in plain English and get instant SQL-powered answers.
-                    No SQL expertise required!
+                    Actuaries can ask questions in plain English and get instant SQL-powered answers using natural language.
                 </p>
 
                 <div class="query-result">
@@ -653,8 +652,8 @@
                 <div class="highlight-box">
                     <h3>Embedded DQ in DLT Pipeline</h3>
                     <p style="font-size: 1.1em; line-height: 1.8;">
-                        Data quality expectations are <strong>CODE</strong> in the DLT pipeline, not external validation scripts.
-                        Records failing expectations are <strong>QUARANTINED</strong> (not dropped silently), giving actuaries
+                        Data quality expectations are <strong>CODE</strong> in the DLT pipeline as version-controlled Python.
+                        Records failing expectations are <strong>QUARANTINED</strong> for investigation, giving actuaries
                         detailed visibility into data issues.
                     </p>
                 </div>
@@ -705,27 +704,16 @@
                     </tr>
                 </table>
 
-                <div class="comparison-grid" style="margin-top: 40px;">
-                    <div class="comparison-card old">
-                        <h4> Traditional ETL (SAS/Excel)</h4>
-                        <ul style="list-style: none; padding: 0;">
-                            <li> Bad data dropped silently</li>
-                            <li> No visibility into failures</li>
-                            <li> Manual validation in spreadsheets</li>
-                            <li> DQ as afterthought</li>
-                            <li> No audit trail</li>
-                        </ul>
-                    </div>
-                    <div class="comparison-card new">
-                        <h4> Databricks DLT</h4>
-                        <ul style="list-style: none; padding: 0;">
-                            <li> Records QUARANTINED (not dropped)</li>
-                            <li> Detailed visibility in DQ table</li>
-                            <li> DQ expectations as CODE</li>
-                            <li> Embedded in pipeline</li>
-                            <li> All audit trail in event log</li>
-                        </ul>
-                    </div>
+                <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+                    <h4 style="color: #FF3621; margin-bottom: 20px;">Databricks DLT Data Quality</h4>
+                    <ul style="font-size: 1.05em; line-height: 1.8;">
+                        <li>Records QUARANTINED for investigation</li>
+                        <li>Detailed visibility in DQ quarantine table</li>
+                        <li>DQ expectations as versioned CODE</li>
+                        <li>Embedded in pipeline definition</li>
+                        <li>Audit trail in event log</li>
+                        <li>Serverless auto-scaling compute</li>
+                    </ul>
                 </div>
 
                 <div class="code-block" style="margin-top: 40px;">
@@ -756,7 +744,7 @@ def claims_clean():
                     <h3>Regulatory Audit: "What did we know when?"</h3>
                     <p style="font-size: 1.1em; line-height: 1.8;">
                         Delta Lake automatically versions every change to your tables. Query data as of any prior timestamp
-                        or version number with a single SQL query. No need to re-run jobs or maintain manual snapshots!
+                        or version number with a single SQL query.
                     </p>
                 </div>
 
@@ -807,7 +795,7 @@ VERSION AS OF 10
                     </div>
 
                     <div class="feature-card">
-                        <h4>🔬 Reproducibility</h4>
+                        <h4>Reproducibility</h4>
                         <p>Recreate any prior analysis exactly as it was</p>
                         <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
 <pre>
@@ -861,27 +849,16 @@ TIMESTAMP AS OF
                     </tr>
                 </table>
 
-                <div class="comparison-grid" style="margin-top: 40px;">
-                    <div class="comparison-card old">
-                        <h4> Traditional SAS/Excel</h4>
-                        <ul style="list-style: none; padding: 0;">
-                            <li> Must save snapshots manually</li>
-                            <li> Re-run entire job to recreate prior state</li>
-                            <li> Storage bloat from copies</li>
-                            <li> No automatic versioning</li>
-                            <li> Difficult to compare periods</li>
-                        </ul>
-                    </div>
-                    <div class="comparison-card new">
-                        <h4> Delta Lake</h4>
-                        <ul style="list-style: none; padding: 0;">
-                            <li> Automatic versioning on every write</li>
-                            <li> One SQL query to time travel</li>
-                            <li> Efficient storage (only changes saved)</li>
-                            <li> Built-in audit trail</li>
-                            <li> Easy period-over-period comparison</li>
-                        </ul>
-                    </div>
+                <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+                    <h4 style="color: #FF3621; margin-bottom: 20px;">Delta Lake Time Travel Capabilities</h4>
+                    <ul style="font-size: 1.05em; line-height: 1.8;">
+                        <li>Automatic versioning on every write operation</li>
+                        <li>Query any prior state with TIMESTAMP AS OF</li>
+                        <li>Efficient storage (only changes saved)</li>
+                        <li>Built-in audit trail for compliance</li>
+                        <li>Period-over-period comparison queries</li>
+                        <li>Restore previous versions when needed</li>
+                    </ul>
                 </div>
             </div>
 
@@ -901,7 +878,7 @@ TIMESTAMP AS OF
                 <h3 style="margin-top: 40px;">Technology Stack</h3>
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🗄️ Unity Catalog</h4>
+                        <h4>Unity Catalog</h4>
                         <ul>
                             <li>Three-level namespace (catalog.schema.table)</li>
                             <li>Fine-grained access control</li>
@@ -936,52 +913,44 @@ TIMESTAMP AS OF
                             <li>Natural language to SQL</li>
                             <li>Domain-aware understanding</li>
                             <li>Self-service for business users</li>
-                            <li>No SQL expertise required</li>
+                            <li>Plain English interface for all users</li>
                         </ul>
                     </div>
                 </div>
 
-                <h3 style="margin-top: 40px;">Databricks vs Traditional</h3>
+                <h3 style="margin-top: 40px;">Platform Capabilities</h3>
                 <table class="result-table">
                     <tr>
-                        <th>Feature</th>
-                        <th>Traditional (SAS/Excel)</th>
-                        <th>Databricks Lakehouse</th>
+                        <th>Capability</th>
+                        <th>Description</th>
                     </tr>
                     <tr>
-                        <td>Triangle Building</td>
-                        <td>Hours to rebuild manually</td>
-                        <td><strong>Seconds</strong> with auto-refresh</td>
+                        <td><strong>Development Triangles</strong></td>
+                        <td>Auto-refreshing analytics with sub-second query response times</td>
                     </tr>
                     <tr>
-                        <td>Data Visualization</td>
-                        <td>Static spreadsheets</td>
-                        <td><strong>Live dashboards</strong></td>
+                        <td><strong>AI/BI Dashboards</strong></td>
+                        <td>Live Lakeview dashboards with interactive visualizations</td>
                     </tr>
                     <tr>
-                        <td>Data Quality</td>
-                        <td>External validation scripts</td>
-                        <td><strong>Embedded in pipeline</strong></td>
+                        <td><strong>Data Quality</strong></td>
+                        <td>DQ expectations embedded as code in DLT pipeline</td>
                     </tr>
                     <tr>
-                        <td>Version Control</td>
-                        <td>Manual file copies</td>
-                        <td><strong>Delta time travel</strong></td>
+                        <td><strong>Time Travel</strong></td>
+                        <td>Delta Lake automatic versioning with TIMESTAMP AS OF queries</td>
                     </tr>
                     <tr>
-                        <td>Data Dictionary</td>
-                        <td>Separate Word docs (often stale)</td>
-                        <td><strong>Unity Catalog</strong> (always current)</td>
+                        <td><strong>Data Catalog</strong></td>
+                        <td>Unity Catalog with lineage, metadata, and governance</td>
                     </tr>
                     <tr>
-                        <td>Self-Service</td>
-                        <td>Requires IT/analytics team</td>
-                        <td><strong>Genie</strong> natural language</td>
+                        <td><strong>Natural Language</strong></td>
+                        <td>Genie AI/BI for SQL-free business user queries</td>
                     </tr>
                     <tr>
-                        <td>Compute</td>
-                        <td>Manual cluster sizing</td>
-                        <td><strong>Serverless</strong> auto-scaling</td>
+                        <td><strong>Compute</strong></td>
+                        <td>Serverless DLT with automatic scaling and optimization</td>
                     </tr>
                 </table>
 
@@ -1013,10 +982,10 @@ Gold Layer (Business-Ready)
                 </div>
 
                 <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
-                    <h3 style="color: #FF3621; margin-bottom: 20px;">🎯 Business Value</h3>
+                    <h3 style="color: #FF3621; margin-bottom: 20px;">Business Value</h3>
                     <ul style="font-size: 1.1em; line-height: 2;">
                         <li><strong>10x faster</strong> reserve analysis (hours → seconds)</li>
-                        <li><strong>Self-service</strong> analytics for actuaries (no IT bottleneck)</li>
+                        <li><strong>Self-service</strong> analytics for actuaries with instant access</li>
                         <li><strong>Built-in compliance</strong> with time travel audit trail</li>
                         <li><strong>Data trust</strong> through embedded DQ and lineage</li>
                         <li><strong>Cost reduction</strong> with serverless auto-scaling</li>
