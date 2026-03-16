@@ -6,12 +6,27 @@
     <title>Finance Actuarial Demo - Databricks</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --sans: 'DM Sans', sans-serif;
-            --mono: 'Space Mono', monospace;
-            --disp: 'Bebas Neue', sans-serif;
+            --mono: 'DM Mono', monospace;
+            --serif: 'Libre Baskerville', serif;
+            --db-red: #EE3D2C;
+            --db-navy: #1B3139;
+            --db-teal: #2A5868;
+            --db-oat: #F4F0E7;
+            --db-oat-dark: #E8E4DB;
+            --sc-green: #003825;
+            --sc-green-mid: #1B6B3A;
+            --sc-green-light: #E8F2EC;
+            --sc-yellow: #FFD100;
+            --sc-yellow-light: #FFF9D6;
+            --white: #FFFFFF;
+            --text: #1B2E24;
+            --text-mid: #4A6572;
+            --text-light: #8EA4AD;
+            --border: #DDD9D0;
         }
         * {
             margin: 0;
@@ -22,8 +37,8 @@
         body {
             font-family: var(--sans);
             line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+            color: var(--text);
+            background: var(--db-oat);
             padding: 20px;
         }
 
@@ -37,17 +52,18 @@
         }
 
         header {
-            background: linear-gradient(135deg, #FF3621 0%, #00539F 100%);
+            background: linear-gradient(135deg, var(--db-red) 0%, var(--sc-green) 100%);
             color: white;
             padding: 40px;
             text-align: center;
         }
 
         header h1 {
-            font-family: var(--disp);
+            font-family: var(--serif);
             font-size: 2.5em;
             margin-bottom: 10px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            font-weight: 700;
         }
 
         header p {
@@ -60,37 +76,38 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             padding: 40px;
-            background: #f8f9fa;
+            background: var(--white);
         }
 
         .stat-card {
-            background: white;
+            background: var(--sc-green-light);
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--sc-green-mid);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
             text-align: center;
-            transition: transform 0.3s;
+            transition: transform 0.2s;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
         }
 
         .stat-number {
             font-size: 2.5em;
-            font-weight: bold;
-            color: #FF3621;
+            font-weight: 700;
+            color: var(--sc-green);
             margin-bottom: 10px;
         }
 
         .stat-label {
-            color: #666;
+            color: var(--text-mid);
             font-size: 0.9em;
         }
 
         nav {
-            background: #2c3e50;
+            background: var(--db-navy);
             padding: 0;
             position: sticky;
             top: 0;
@@ -111,11 +128,13 @@
             padding: 20px 30px;
             cursor: pointer;
             font-size: 1em;
-            transition: background 0.3s;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: var(--sans);
         }
 
         nav button:hover, nav button.active {
-            background: #FF3621;
+            background: var(--db-red);
         }
 
         .content {
@@ -137,32 +156,34 @@
         }
 
         h2 {
-            font-family: var(--disp);
-            color: #2c3e50;
+            font-family: var(--serif);
+            color: var(--sc-green);
             margin-bottom: 30px;
             font-size: 2em;
-            border-bottom: 3px solid #FF3621;
+            border-bottom: 3px solid var(--db-red);
             padding-bottom: 10px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            font-weight: 700;
         }
 
         .query-result {
-            background: #f8f9fa;
-            border-left: 4px solid #FF3621;
+            background: var(--db-oat);
+            border-left: 4px solid var(--sc-green-mid);
             padding: 25px;
             margin-bottom: 30px;
-            border-radius: 8px;
+            border-radius: 6px;
         }
 
         .query-result h3 {
-            color: #FF3621;
+            color: var(--sc-green);
             margin-bottom: 15px;
             font-size: 1.5em;
+            font-weight: 700;
         }
 
         .query-result .question {
             font-style: italic;
-            color: #666;
+            color: var(--text-mid);
             margin-bottom: 20px;
             font-size: 1.1em;
         }
@@ -177,66 +198,76 @@
         }
 
         .result-table th {
-            background: #2c3e50;
+            background: var(--sc-green);
             color: white;
             padding: 15px;
             text-align: left;
+            font-weight: 600;
         }
 
         .result-table td {
             padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-table tr:nth-child(even) td {
+            background: var(--db-oat);
         }
 
         .result-table tr:hover {
-            background: #f1f3f5;
+            background: var(--sc-green-light);
         }
 
         .badge {
             display: inline-block;
             padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .badge-red {
-            background: #fee;
-            color: #c00;
+            background: #FFECEA;
+            color: var(--db-red);
         }
 
         .badge-amber {
-            background: #ffc;
-            color: #860;
+            background: var(--sc-yellow-light);
+            color: #7A5C00;
         }
 
         .badge-green {
-            background: #efe;
-            color: #060;
+            background: var(--sc-green-light);
+            color: var(--sc-green-mid);
         }
 
         .code-block {
-            background: #2c3e50;
-            color: #ecf0f1;
+            background: #0E1C22;
+            color: #8DD2E8;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 6px;
             overflow-x: auto;
             margin: 20px 0;
             font-family: var(--mono);
-            font-size: 0.9em;
+            font-size: 0.85em;
+            line-height: 1.6;
         }
 
         .highlight-box {
-            background: linear-gradient(135deg, #F57F29 0%, #00539F 100%);
+            background: linear-gradient(135deg, var(--db-red) 0%, var(--sc-green) 100%);
             color: white;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 8px;
             margin: 30px 0;
         }
 
         .highlight-box h3 {
             margin-bottom: 15px;
             font-size: 1.5em;
+            font-weight: 700;
+            font-family: var(--serif);
         }
 
         .comparison-grid {
@@ -253,22 +284,23 @@
         }
 
         .comparison-card.old {
-            background: #fee;
-            border-color: #fcc;
+            background: #FFECEA;
+            border-color: var(--db-red);
         }
 
         .comparison-card.new {
-            background: #efe;
-            border-color: #cfc;
+            background: var(--sc-green-light);
+            border-color: var(--sc-green-mid);
         }
 
         .comparison-card h4 {
             margin-bottom: 15px;
-            color: #2c3e50;
+            color: var(--sc-green);
+            font-weight: 700;
         }
 
         footer {
-            background: #2c3e50;
+            background: var(--db-navy);
             color: white;
             text-align: center;
             padding: 30px;
@@ -284,19 +316,24 @@
         .feature-card {
             background: white;
             padding: 25px;
-            border-radius: 12px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
+            border-radius: 6px;
+            border-left: 4px solid var(--sc-green-mid);
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
         }
 
         .feature-card:hover {
-            border-color: #FF3621;
-            box-shadow: 0 8px 16px rgba(255,54,33,0.2);
+            border-left-color: var(--db-red);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
         }
 
         .feature-card h4 {
-            color: #FF3621;
+            color: var(--sc-green);
             margin-bottom: 15px;
+            font-weight: 700;
         }
 
         .feature-card ul {
@@ -308,11 +345,12 @@
             margin-bottom: 8px;
             padding-left: 20px;
             position: relative;
+            color: var(--text-mid);
         }
 
         .feature-card li:before {
             content: "•";
-            color: #FF3621;
+            color: var(--sc-green-mid);
             font-weight: bold;
             position: absolute;
             left: 0;
@@ -320,10 +358,11 @@
 
         .metric-large {
             font-size: 3em;
-            font-weight: bold;
-            color: #FF3621;
+            font-weight: 700;
+            color: var(--sc-green);
             text-align: center;
             margin: 20px 0;
+            font-family: var(--serif);
         }
     </style>
 </head>
@@ -431,7 +470,7 @@
                     </div>
                 </div>
 
-                <h3 style="margin-top: 40px; color: #2c3e50;">Key Metrics</h3>
+                <h3 style="margin-top: 40px; color: var(--sc-green); font-weight: 700;">Key Metrics</h3>
                 <table class="result-table">
                     <tr>
                         <th>Layer</th>
@@ -482,7 +521,7 @@
             <div id="genie" class="section">
                 <h2> Genie Natural Language Queries</h2>
 
-                <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">
+                <p style="font-size: 1.1em; color: var(--text-mid); margin-bottom: 30px;">
                     Actuaries can ask questions in plain English and get instant SQL-powered answers using natural language.
                 </p>
 
@@ -630,7 +669,7 @@
                             <td>3,463</td>
                         </tr>
                     </table>
-                    <p style="margin-top: 15px; color: #666;">
+                    <p style="margin-top: 15px; color: var(--text-mid);">
                         <strong>Insight:</strong> CTP has lowest paid ratio (58.6%) showing realistic long-tail settlement pattern!
                     </p>
                 </div>
@@ -639,7 +678,7 @@
                     <h3>Query 4</h3>
                     <div class="question">"What percentage of large losses are still open?"</div>
                     <div class="metric-large">43.8%</div>
-                    <p style="text-align: center; color: #666;">
+                    <p style="text-align: center; color: var(--text-mid);">
                         351 out of 802 large losses are still <strong>OPEN</strong>, requiring active case reserving
                     </p>
                 </div>
@@ -704,8 +743,8 @@
                     </tr>
                 </table>
 
-                <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
-                    <h4 style="color: #FF3621; margin-bottom: 20px;">Databricks DLT Data Quality</h4>
+                <div style="margin-top: 40px; padding: 30px; background: var(--db-oat); border-radius: 8px; border-left: 4px solid var(--sc-green-mid);">
+                    <h4 style="color: var(--sc-green); margin-bottom: 20px; font-weight: 700;">Databricks DLT Data Quality</h4>
                     <ul style="font-size: 1.05em; line-height: 1.8;">
                         <li>Records QUARANTINED for investigation</li>
                         <li>Detailed visibility in DQ quarantine table</li>
@@ -849,8 +888,8 @@ TIMESTAMP AS OF
                     </tr>
                 </table>
 
-                <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
-                    <h4 style="color: #FF3621; margin-bottom: 20px;">Delta Lake Time Travel Capabilities</h4>
+                <div style="margin-top: 40px; padding: 30px; background: var(--db-oat); border-radius: 8px; border-left: 4px solid var(--sc-green-mid);">
+                    <h4 style="color: var(--sc-green); margin-bottom: 20px; font-weight: 700;">Delta Lake Time Travel Capabilities</h4>
                     <ul style="font-size: 1.05em; line-height: 1.8;">
                         <li>Automatic versioning on every write operation</li>
                         <li>Query any prior state with TIMESTAMP AS OF</li>
@@ -981,8 +1020,8 @@ Gold Layer (Business-Ready)
 </pre>
                 </div>
 
-                <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
-                    <h3 style="color: #FF3621; margin-bottom: 20px;">Business Value</h3>
+                <div style="margin-top: 40px; padding: 30px; background: var(--db-oat); border-radius: 8px; border-left: 4px solid var(--sc-green-mid);">
+                    <h3 style="color: var(--sc-green); margin-bottom: 20px; font-weight: 700; font-family: var(--serif);">Business Value</h3>
                     <ul style="font-size: 1.1em; line-height: 2;">
                         <li><strong>10x faster</strong> reserve analysis (hours → seconds)</li>
                         <li><strong>Self-service</strong> analytics for actuaries with instant access</li>
