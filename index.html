@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
             padding: 20px;
         }
 
@@ -29,7 +29,7 @@
         }
 
         header {
-            background: linear-gradient(135deg, #FF3621 0%, #C1272D 100%);
+            background: linear-gradient(135deg, #FF3621 0%, #00539F 100%);
             color: white;
             padding: 40px;
             text-align: center;
@@ -214,7 +214,7 @@
         }
 
         .highlight-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #F57F29 0%, #00539F 100%);
             color: white;
             padding: 30px;
             border-radius: 15px;
@@ -291,11 +291,18 @@
             padding-left: 0;
         }
 
+        .feature-card li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
         .feature-card li:before {
-            content: "✓ ";
-            color: #28a745;
+            content: "•";
+            color: #FF3621;
             font-weight: bold;
-            margin-right: 8px;
+            position: absolute;
+            left: 0;
         }
 
         .metric-large {
@@ -310,7 +317,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏦 Finance Actuarial Demo</h1>
+            <h1> Finance Actuarial Demo</h1>
             <p>Databricks Lakehouse for Insurance Analytics</p>
             <p style="font-size: 0.9em; margin-top: 10px;">
                 <strong>Workspace:</strong> e2-demo-field-eng.cloud.databricks.com |
@@ -358,12 +365,12 @@
         <div class="content">
             <!-- OVERVIEW SECTION -->
             <div id="overview" class="section active">
-                <h2>📊 Demo Overview</h2>
+                <h2> Demo Overview</h2>
 
                 <div class="highlight-box">
                     <h3>What This Demo Shows</h3>
                     <p style="font-size: 1.1em; line-height: 1.8;">
-                        Complete end-to-end Finance Actuarial analytics on Databricks, demonstrating how insurance companies can modernize
+                        End-to-end Finance Actuarial analytics on Databricks, demonstrating how insurance companies can modernize
                         from legacy SAS/Excel workflows to a unified Lakehouse platform with natural language querying, embedded data quality,
                         and time travel capabilities.
                     </p>
@@ -371,7 +378,7 @@
 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🤖 Genie Natural Language</h4>
+                        <h4> Genie Natural Language</h4>
                         <ul>
                             <li>Actuaries ask questions in plain English</li>
                             <li>No SQL expertise required</li>
@@ -381,17 +388,17 @@
                     </div>
 
                     <div class="feature-card">
-                        <h4>🛡️ Embedded Data Quality</h4>
+                        <h4> Embedded Data Quality</h4>
                         <ul>
                             <li>6 DQ expectations in DLT pipeline</li>
                             <li>Quarantine pattern (don't drop data)</li>
-                            <li>Complete audit trail in event log</li>
+                            <li>Detailed audit trail in event log</li>
                             <li>DQ as code (version controlled)</li>
                         </ul>
                     </div>
 
                     <div class="feature-card">
-                        <h4>⏰ Delta Time Travel</h4>
+                        <h4> Delta Time Travel</h4>
                         <ul>
                             <li>"What did we know when?" for regulators</li>
                             <li>No need to re-run jobs</li>
@@ -429,7 +436,7 @@
                         <td><strong>Bronze</strong></td>
                         <td>claims_transactions_raw</td>
                         <td>37,437</td>
-                        <td>Full claims transaction history</td>
+                        <td>All claims transaction history</td>
                     </tr>
                     <tr>
                         <td><strong>Gold</strong></td>
@@ -460,7 +467,7 @@
 
             <!-- GENIE SECTION -->
             <div id="genie" class="section">
-                <h2>🤖 Genie Natural Language Queries</h2>
+                <h2> Genie Natural Language Queries</h2>
 
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 30px;">
                     Actuaries can ask questions in plain English and get instant SQL-powered answers.
@@ -486,7 +493,7 @@
                             <td>2020</td>
                             <td>36 months</td>
                             <td>217.8%</td>
-                            <td><span class="badge badge-red">🔴 RED</span></td>
+                            <td><span class="badge badge-red"> RED</span></td>
                         </tr>
                         <tr>
                             <td>Motor</td>
@@ -494,7 +501,7 @@
                             <td>2019</td>
                             <td>24 months</td>
                             <td>110.5%</td>
-                            <td><span class="badge badge-red">🔴 RED</span></td>
+                            <td><span class="badge badge-red"> RED</span></td>
                         </tr>
                         <tr>
                             <td>CTP</td>
@@ -502,7 +509,7 @@
                             <td>2019</td>
                             <td>36 months</td>
                             <td>92.2%</td>
-                            <td><span class="badge badge-red">🔴 RED</span></td>
+                            <td><span class="badge badge-red"> RED</span></td>
                         </tr>
                         <tr>
                             <td>CTP</td>
@@ -510,7 +517,7 @@
                             <td>2025</td>
                             <td>24 months</td>
                             <td>79.2%</td>
-                            <td><span class="badge badge-red">🔴 RED</span></td>
+                            <td><span class="badge badge-red"> RED</span></td>
                         </tr>
                         <tr>
                             <td>CTP</td>
@@ -518,7 +525,7 @@
                             <td>2022</td>
                             <td>24 months</td>
                             <td>67.9%</td>
-                            <td><span class="badge badge-red">🔴 RED</span></td>
+                            <td><span class="badge badge-red"> RED</span></td>
                         </tr>
                     </table>
                 </div>
@@ -628,14 +635,14 @@
 
             <!-- DATA QUALITY SECTION -->
             <div id="dq" class="section">
-                <h2>🛡️ Data Quality Monitoring</h2>
+                <h2> Data Quality Monitoring</h2>
 
                 <div class="highlight-box">
                     <h3>Embedded DQ in DLT Pipeline</h3>
                     <p style="font-size: 1.1em; line-height: 1.8;">
                         Data quality expectations are <strong>CODE</strong> in the DLT pipeline, not external validation scripts.
                         Records failing expectations are <strong>QUARANTINED</strong> (not dropped silently), giving actuaries
-                        complete visibility into data issues.
+                        detailed visibility into data issues.
                     </p>
                 </div>
 
@@ -687,23 +694,23 @@
 
                 <div class="comparison-grid" style="margin-top: 40px;">
                     <div class="comparison-card old">
-                        <h4>❌ Traditional ETL (SAS/Excel)</h4>
+                        <h4> Traditional ETL (SAS/Excel)</h4>
                         <ul style="list-style: none; padding: 0;">
-                            <li>✗ Bad data dropped silently</li>
-                            <li>✗ No visibility into failures</li>
-                            <li>✗ Manual validation in spreadsheets</li>
-                            <li>✗ DQ as afterthought</li>
-                            <li>✗ No audit trail</li>
+                            <li> Bad data dropped silently</li>
+                            <li> No visibility into failures</li>
+                            <li> Manual validation in spreadsheets</li>
+                            <li> DQ as afterthought</li>
+                            <li> No audit trail</li>
                         </ul>
                     </div>
                     <div class="comparison-card new">
-                        <h4>✅ Databricks DLT</h4>
+                        <h4> Databricks DLT</h4>
                         <ul style="list-style: none; padding: 0;">
-                            <li>✓ Records QUARANTINED (not dropped)</li>
-                            <li>✓ Complete visibility in DQ table</li>
-                            <li>✓ DQ expectations as CODE</li>
-                            <li>✓ Embedded in pipeline</li>
-                            <li>✓ Full audit trail in event log</li>
+                            <li> Records QUARANTINED (not dropped)</li>
+                            <li> Detailed visibility in DQ table</li>
+                            <li> DQ expectations as CODE</li>
+                            <li> Embedded in pipeline</li>
+                            <li> All audit trail in event log</li>
                         </ul>
                     </div>
                 </div>
@@ -730,7 +737,7 @@ def claims_clean():
 
             <!-- TIME TRAVEL SECTION -->
             <div id="timetravel" class="section">
-                <h2>⏰ Delta Lake Time Travel</h2>
+                <h2> Delta Lake Time Travel</h2>
 
                 <div class="highlight-box">
                     <h3>Regulatory Audit: "What did we know when?"</h3>
@@ -743,7 +750,7 @@ def claims_clean():
                 <h3 style="margin-top: 40px;">Time Travel Use Cases</h3>
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>📋 Regulatory Compliance</h4>
+                        <h4> Regulatory Compliance</h4>
                         <p>"What triangle did we submit to APRA last quarter?"</p>
                         <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
 <pre>
@@ -755,7 +762,7 @@ TIMESTAMP AS OF '2025-09-30'
                     </div>
 
                     <div class="feature-card">
-                        <h4>📊 Variance Analysis</h4>
+                        <h4> Variance Analysis</h4>
                         <p>Compare current vs prior quarter reserve estimates</p>
                         <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
 <pre>
@@ -773,7 +780,7 @@ JOIN development_triangles
                     </div>
 
                     <div class="feature-card">
-                        <h4>🔄 Mistake Recovery</h4>
+                        <h4> Mistake Recovery</h4>
                         <p>Restore accidentally deleted or modified data</p>
                         <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
 <pre>
@@ -843,23 +850,23 @@ TIMESTAMP AS OF
 
                 <div class="comparison-grid" style="margin-top: 40px;">
                     <div class="comparison-card old">
-                        <h4>❌ Traditional SAS/Excel</h4>
+                        <h4> Traditional SAS/Excel</h4>
                         <ul style="list-style: none; padding: 0;">
-                            <li>✗ Must save snapshots manually</li>
-                            <li>✗ Re-run entire job to recreate prior state</li>
-                            <li>✗ Storage bloat from copies</li>
-                            <li>✗ No automatic versioning</li>
-                            <li>✗ Difficult to compare periods</li>
+                            <li> Must save snapshots manually</li>
+                            <li> Re-run entire job to recreate prior state</li>
+                            <li> Storage bloat from copies</li>
+                            <li> No automatic versioning</li>
+                            <li> Difficult to compare periods</li>
                         </ul>
                     </div>
                     <div class="comparison-card new">
-                        <h4>✅ Delta Lake</h4>
+                        <h4> Delta Lake</h4>
                         <ul style="list-style: none; padding: 0;">
-                            <li>✓ Automatic versioning on every write</li>
-                            <li>✓ One SQL query to time travel</li>
-                            <li>✓ Efficient storage (only changes saved)</li>
-                            <li>✓ Built-in audit trail</li>
-                            <li>✓ Easy period-over-period comparison</li>
+                            <li> Automatic versioning on every write</li>
+                            <li> One SQL query to time travel</li>
+                            <li> Efficient storage (only changes saved)</li>
+                            <li> Built-in audit trail</li>
+                            <li> Easy period-over-period comparison</li>
                         </ul>
                     </div>
                 </div>
@@ -867,7 +874,7 @@ TIMESTAMP AS OF
 
             <!-- ARCHITECTURE SECTION -->
             <div id="architecture" class="section">
-                <h2>🏗️ Architecture</h2>
+                <h2> Architecture</h2>
 
                 <div class="highlight-box">
                     <h3>Medallion Architecture: Bronze → Silver → Gold</h3>
@@ -891,7 +898,7 @@ TIMESTAMP AS OF
                     </div>
 
                     <div class="feature-card">
-                        <h4>⚡ Delta Lake</h4>
+                        <h4> Delta Lake</h4>
                         <ul>
                             <li>ACID transactions on data lake</li>
                             <li>Time travel / versioning</li>
@@ -901,17 +908,17 @@ TIMESTAMP AS OF
                     </div>
 
                     <div class="feature-card">
-                        <h4>🔄 Delta Live Tables</h4>
+                        <h4> Delta Live Tables</h4>
                         <ul>
                             <li>Declarative pipeline definitions</li>
                             <li>Embedded DQ expectations</li>
                             <li>Serverless auto-scaling</li>
-                            <li>Complete audit logs</li>
+                            <li>Detailed audit logs</li>
                         </ul>
                     </div>
 
                     <div class="feature-card">
-                        <h4>🤖 Genie (AI/BI)</h4>
+                        <h4> Genie (AI/BI)</h4>
                         <ul>
                             <li>Natural language to SQL</li>
                             <li>Domain-aware understanding</li>
