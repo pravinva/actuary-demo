@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Actuarial Demo - Databricks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --sans: 'DM Sans', sans-serif;
+            --mono: 'Space Mono', monospace;
+            --disp: 'Bebas Neue', sans-serif;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +20,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--sans);
             line-height: 1.6;
             color: #333;
             background: #f5f5f5;
@@ -36,8 +44,10 @@
         }
 
         header h1 {
+            font-family: var(--disp);
             font-size: 2.5em;
             margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
         header p {
@@ -127,11 +137,13 @@
         }
 
         h2 {
+            font-family: var(--disp);
             color: #2c3e50;
             margin-bottom: 30px;
             font-size: 2em;
             border-bottom: 3px solid #FF3621;
             padding-bottom: 10px;
+            letter-spacing: 1px;
         }
 
         .query-result {
@@ -210,7 +222,8 @@
             border-radius: 8px;
             overflow-x: auto;
             margin: 20px 0;
-            font-family: 'Courier New', monospace;
+            font-family: var(--mono);
+            font-size: 0.9em;
         }
 
         .highlight-box {
