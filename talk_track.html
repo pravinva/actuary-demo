@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Actuarial Demo - Talk Track</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sans: 'DM Sans', sans-serif;
+            --mono: 'DM Mono', monospace;
+            --serif: 'Libre Baskerville', serif;
+            --db-red: #EE3D2C;
+            --db-navy: #1B3139;
+            --db-oat: #F4F0E7;
+            --sc-green: #003825;
+            --sc-green-mid: #1B6B3A;
+            --sc-green-light: #E8F2EC;
+            --text: #1B2E24;
+            --text-mid: #4A6572;
+            --border: #DDD9D0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--sans);
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--db-oat);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--db-red) 0%, var(--sc-green) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: var(--serif);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 12px 24px;
+            background: var(--sc-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .back-link:hover {
+            background: var(--sc-green-mid);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .toc {
+            background: var(--sc-green-light);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--sc-green-mid);
+        }
+
+        .toc h2 {
+            font-family: var(--serif);
+            color: var(--sc-green);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .toc li:before {
+            content: "▸";
+            color: var(--sc-green-mid);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .toc a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--sc-green);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            font-family: var(--serif);
+            color: var(--sc-green);
+            margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .section h3 {
+            color: var(--sc-green-mid);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .section h4 {
+            color: var(--text);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .timing {
+            display: inline-block;
+            background: var(--db-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .screen-indicator {
+            background: var(--db-oat);
+            padding: 15px 20px;
+            border-radius: 6px;
+            border-left: 4px solid var(--sc-green-mid);
+            margin: 20px 0;
+            font-family: var(--mono);
+            font-size: 0.9em;
+        }
+
+        .screen-indicator strong {
+            color: var(--sc-green);
+        }
+
+        .talk-script {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-mid);
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #0E1C22;
+            color: #8DD2E8;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: var(--mono);
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: var(--sc-yellow-light);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, var(--db-red) 0%, var(--sc-green) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .problem-box h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-family: var(--serif);
+        }
+
+        .solution-box {
+            background: var(--sc-green-light);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--sc-green-mid);
+        }
+
+        .solution-box h4 {
+            color: var(--sc-green);
+            margin-bottom: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        table th {
+            background: var(--sc-green);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table tr:nth-child(even) td {
+            background: var(--db-oat);
+        }
+
+        .tips {
+            background: #FFF9D6;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #FFD100;
+            margin: 20px 0;
+        }
+
+        .tips h4 {
+            color: #7A5C00;
+            margin-bottom: 12px;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: var(--db-navy);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Finance Actuarial Demo</h1>
+            <p>Complete Talk Track - 45 Minutes | Problem-Focused Presentation</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">
+                Friday, March 20, 2026 | 10:00 AM - 2:00 PM
+            </p>
+        </header>
+
+        <div class="content">
+            <a href="index.html" class="back-link">← Back to Interactive Dashboard</a>
+
+            <div class="toc">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li><a href="#intro">Introduction (5 min)</a></li>
+                    <li><a href="#problem1">Problem 1: Regulatory Compliance & Audit (7 min)</a></li>
+                    <li><a href="#problem2">Problem 2: Board & Executive Reporting (5 min)</a></li>
+                    <li><a href="#problem3">Problem 3: Reserve Adequacy Monitoring (6 min)</a></li>
+                    <li><a href="#problem4">Problem 4: Data Quality & Trust (5 min)</a></li>
+                    <li><a href="#problem5">Problem 5: Speed & Efficiency (5 min)</a></li>
+                    <li><a href="#problem6">Problem 6: Self-Service Analytics (7 min)</a></li>
+                    <li><a href="#problem7">Problem 7: Audit & Historical Reconstruction (3 min)</a></li>
+                    <li><a href="#wrapup">Wrap-Up & Q&A (2 min)</a></li>
+                </ul>
+            </div>
+
+            <!-- INTRODUCTION -->
+            <div class="section" id="intro">
+                <h2>Introduction <span class="timing">5 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> Interactive Dashboard (Overview tab)<br>
+                    <strong>URL:</strong> https://pravinva.github.io/actuary-demo/
+                </div>
+
+                <div class="talk-script">
+                    <p>"Good morning everyone. Thanks for having me today - I know it's a full agenda, so I'll keep us moving.</p>
+
+                    <p>My name is Pravin, and I'm here to show you what the Databricks Lakehouse platform can deliver for Finance Actuarial outcomes.</p>
+                </div>
+
+                <h3>Setup: What You're Going to See</h3>
+
+                <div class="talk-script">
+                    <p>I've built a demonstration environment with production-scale data:</p>
+                    <ul>
+                        <li>10,000 policies across CTP, Motor, and Home products</li>
+                        <li>37,437 claims transactions with realistic development patterns</li>
+                        <li>Complete pipeline from raw data to analytics</li>
+                    </ul>
+
+                    <p><em>[Point at stats grid on screen]</em></p>
+
+                    <p>Everything you'll see today is running live in your Databricks workspace. This isn't theoretical - it's working code, working data, working analytics.</p>
+                </div>
+
+                <h3>The Seven Problems We'll Address</h3>
+
+                <div class="talk-script">
+                    <p>Finance Actuaries face seven core problems. I'm going to show you how Databricks solves each one.</p>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Problem</th>
+                        <th>Time</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Regulatory Compliance - APRA submissions, IFRS 17, audit requirements</td>
+                        <td>7 min</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Board Reporting - large loss tracking, reserve movement explanations</td>
+                        <td>5 min</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Reserve Adequacy Monitoring - under-reserved portfolios, deterioration</td>
+                        <td>6 min</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Data Quality & Trust - can we trust these numbers?</td>
+                        <td>5 min</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Speed & Efficiency - overnight batch jobs vs instant answers</td>
+                        <td>5 min</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Self-Service Analytics - breaking the IT bottleneck</td>
+                        <td>7 min</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Audit & Historical Reconstruction - "what did we report last quarter?"</td>
+                        <td>3 min</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- PROBLEM 1 -->
+            <div class="section" id="problem1">
+                <h2>Problem 1: Regulatory Compliance & Audit <span class="timing">7 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> Databricks Workspace → Unity Catalog → SQL Editor
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>The Finance Actuarial team has to satisfy multiple regulators:</p>
+                    <ul>
+                        <li><strong>APRA</strong> quarterly submissions - specific data formats, cohort groupings</li>
+                        <li><strong>IFRS 17</strong> annual reporting - discounted liability calculations</li>
+                        <li><strong>External auditors</strong> - asking 'prove this number, show me the lineage'</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Key Questions:</strong></p>
+                    <ul>
+                        <li>'Can you reproduce what you submitted 6 months ago?'</li>
+                        <li>'How was this reserve calculated? Show me the audit trail.'</li>
+                        <li>'Are your data quality controls operating?'</li>
+                    </ul>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 1: IFRS 17 Cohort Reporting</h4>
+                    <div class="talk-script">
+                        <p>"Let me show you IFRS 17 cohort reporting. APRA requires us to group policies by inception period."</p>
+                    </div>
+
+                    <div class="code-block">
+<pre>SELECT cohort_id,
+       cohort_inception_year,
+       cohort_inception_quarter,
+       policy_count,
+       gross_written_premium,
+       incurred_claims_ytd,
+       loss_ratio,
+       loss_ratio_flag
+FROM actuary_corpfin.gold.ifrs17_cohorts
+WHERE loss_ratio_flag = 'ABOVE_100'
+ORDER BY loss_ratio DESC
+LIMIT 20</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"We've created <span class="highlight">522 cohorts</span> - grouped by inception quarter, exactly how APRA wants it.</p>
+                        <p><span class="highlight">467 cohorts are flagged 'ABOVE_100'</span> - meaning loss ratio over 100%. Those need reserve strengthening, and APRA wants to see them highlighted in your submission.</p>
+                        <p>This table is submission-ready. Export to Excel, attach to APRA portal, done."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 2: Time Travel for 'What Did We Report?'</h4>
+                    <div class="talk-script">
+                        <p>"Now the harder question: 'What triangle did you submit to APRA on September 30th?'"</p>
+                        <p><em>[Navigate to Unity Catalog > development_triangles table > History tab]</em></p>
+                        <p>"See this version history? Delta Lake automatically versions every change."</p>
+                    </div>
+
+                    <ul>
+                        <li>Version 0: March 16, 2026 - Initial data load</li>
+                        <li>Version 1: Gold analytics created</li>
+                        <li>Version 2: Simulated Q3 update</li>
+                        <li>Version 3: Large loss reserve strengthening</li>
+                        <li>Version 4: Q1 2026 cohorts added</li>
+                    </ul>
+
+                    <div class="code-block">
+<pre>SELECT * FROM actuary_corpfin.gold.development_triangles
+TIMESTAMP AS OF '2025-09-30T23:59:59Z'
+WHERE product = 'CTP' AND state = 'NSW'</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"This returns <strong>exactly</strong> what existed on September 30th. Not a re-run. Not a guess. The actual state.</p>
+                        <p>No manual snapshots. No 'Final_v2' files. Built-in versioning."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 3: Complete Data Lineage</h4>
+                    <div class="talk-script">
+                        <p>"And the question: 'How was this number calculated?'"</p>
+                        <p><em>[Click Lineage tab on a Gold table]</em></p>
+                        <p>"See this flow?"</p>
+                    </div>
+
+                    <p style="margin-left: 20px; font-family: var(--mono);">
+                        Bronze claims_transactions_raw (raw from source system)<br>
+                        → Silver claims_clean (DQ validated)<br>
+                        → Gold development_triangles (aggregated by development period)
+                    </p>
+
+                    <div class="talk-script">
+                        <p>"Click any node - you see the transformation SQL. Complete transparency.</p>
+                        <p>When the auditor asks 'how did you calculate incurred for Motor NSW AY2020?', you trace it back through every transformation to the source system extract."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 4: Audit Trail - Proving Controls Operate</h4>
+                    <div class="talk-script">
+                        <p>"Final piece: 'Are your data quality controls operating?'"</p>
+                        <p><em>[Navigate to DLT Pipeline > Event Log]</em></p>
+                        <p>"Every pipeline run is logged:"</p>
+                    </div>
+
+                    <ul>
+                        <li>Timestamp: When it ran</li>
+                        <li>Rows processed: 37,437 claims</li>
+                        <li>DQ checks executed: 6 expectations evaluated</li>
+                        <li>Records quarantined: 142 failed incurred_gte_paid</li>
+                    </ul>
+
+                    <div class="talk-script">
+                        <p>"When APRA audits your controls, you show this log: 'On March 16, 2026, we processed 37,437 claims. 142 failed validation and were quarantined for investigation. No systemic issues found.'</p>
+                        <p>Auditor-ready compliance documentation."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM 2 -->
+            <div class="section" id="problem2">
+                <h2>Problem 2: Board & Executive Reporting <span class="timing">5 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> SQL Editor + Interactive Dashboard
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>Every month, the CFO needs to report to the board:</p>
+                    <ul>
+                        <li>What are our largest claims? (Top 10 board slide)</li>
+                        <li>Why did reserves move $5M this quarter? (variance explanation)</li>
+                        <li>What's our exposure on open large losses? (risk discussion)</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>The pain:</strong></p>
+                    <ul>
+                        <li>Manual board pack preparation takes days</li>
+                        <li>CFO gets questions and has to scramble for answers</li>
+                        <li>Executives want summaries, not technical details</li>
+                    </ul>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 1: Large Loss Register (Board Reporting)</h4>
+
+                    <div class="code-block">
+<pre>SELECT claim_id,
+       product,
+       state,
+       peril,
+       current_incurred,
+       current_paid,
+       status,
+       quarters_open,
+       reinsurance_recovery_expected
+FROM actuary_corpfin.gold.large_loss_register
+WHERE current_incurred > 250000
+ORDER BY current_incurred DESC
+LIMIT 10</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Top 10 largest claims:</p>
+                        <ul>
+                            <li>#1: $1.59 million - CTP liability in WA, closed</li>
+                            <li>#2: $1.52 million - CTP liability in WA, closed</li>
+                            <li>And so on...</li>
+                        </ul>
+                        <p>This is the board slide. <span class="highlight">802 large losses tracked automatically.</span></p>
+                        <p>Key metric for the board: <strong>43.8% of large losses are still open</strong> - that's 351 claims requiring active case reserving. The board needs to know this because it drives reserve volatility quarter-to-quarter."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 2: Reserve Deterioration Explanation</h4>
+
+                    <div class="talk-script">
+                        <p>"CFO asks: 'Why did reserves strengthen $5M this quarter?'"</p>
+                    </div>
+
+                    <div class="code-block">
+<pre>SELECT product, state, accident_year, dev_period,
+       actual_incurred, expected_incurred,
+       variance_pct, rag_status
+FROM actuary_corpfin.gold.actual_vs_expected
+WHERE rag_status = 'RED'
+ORDER BY variance_pct DESC
+LIMIT 10</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Here's the answer: <span class="highlight">44 RED deteriorations.</span></p>
+                        <p>Top one: Motor VIC, Accident Year 2020, 36-month development, showing <strong>217.8% adverse variance</strong>.</p>
+                        <p>That's your explanation. The CFO tells the board: 'Motor Victoria 2020 cohort is developing worse than expected - reserve strengthening required.'</p>
+                        <p>Instant variance explanation."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM 3 -->
+            <div class="section" id="problem3">
+                <h2>Problem 3: Reserve Adequacy Monitoring <span class="timing">6 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> SQL Editor + Interactive Dashboard (Genie tab)
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>The core question Finance Actuaries answer: <strong>Are our reserves sufficient, or are we under-reserved?</strong></p>
+                    <p style="margin-top: 15px;">Specifically:</p>
+                    <ul>
+                        <li>Which portfolios are deteriorating faster than expected?</li>
+                        <li>Are we seeing emerging trends before they blow out?</li>
+                        <li>Do we need to strengthen reserves this quarter?</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Traditional process:</strong></p>
+                    <ul>
+                        <li>Build development triangles manually in Excel</li>
+                        <li>Takes hours to rebuild when new claims arrive</li>
+                        <li>No early warning system</li>
+                        <li>Reactive, not proactive</li>
+                    </ul>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 1: Development Triangles (Auto-Refreshing)</h4>
+
+                    <div class="code-block">
+<pre>SELECT product, state, accident_year, dev_period,
+       cumulative_incurred, cumulative_paid,
+       claim_count, open_claim_count
+FROM actuary_corpfin.gold.development_triangles
+WHERE product = 'CTP' AND state = 'NSW'
+ORDER BY accident_year, dev_period
+LIMIT 30</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"This shows claims development over time:</p>
+                        <ul>
+                            <li>Accident Year 2018 at 12 months: $X incurred</li>
+                            <li>Same cohort at 24 months: $Y incurred (increased as claims develop)</li>
+                            <li>At 36 months: $Z incurred</li>
+                            <li>And so on through 60 months</li>
+                        </ul>
+                        <p>We've built <span class="highlight">399 triangle cells</span> across CTP, Motor, and Home.</p>
+                        <p>Here's what's different: In the traditional world, rebuilding this triangle when new claims arrive takes hours - often an overnight batch job.</p>
+                        <p>On Databricks, it's instant. New claims land in Bronze, pipeline runs, Gold table refreshes. Actuaries query the latest triangle in real-time."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 2: Deterioration Monitoring with RAG Alerts</h4>
+
+                    <div class="code-block">
+<pre>SELECT product, state, accident_year, dev_period,
+       variance_pct, rag_status
+FROM actuary_corpfin.gold.actual_vs_expected
+WHERE variance_pct > 10
+ORDER BY variance_pct DESC
+LIMIT 10</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"We monitor <span class="highlight">266 factors</span> comparing actual development to expected patterns.</p>
+                        <p><strong>RAG status:</strong></p>
+                        <ul>
+                            <li><strong>RED:</strong> >15% variance - immediate action required</li>
+                            <li><strong>AMBER:</strong> 5-15% variance - watch closely</li>
+                            <li><strong>GREEN:</strong> <5% variance - healthy</li>
+                        </ul>
+                        <p>Right now: 44 RED alerts, 42 AMBER warnings, 180 GREEN (healthy)</p>
+                        <p>Top RED deterioration: Motor VIC AY2020 showing <strong>217.8% variance</strong>. The actuary needs to investigate today - not wait until month-end.</p>
+                        <p><strong>This is the early warning system.</strong>"</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 3: Natural Language Queries for Actuaries</h4>
+
+                    <div class="talk-script">
+                        <p>"Let me show you how actuaries interact with this data."</p>
+                        <p><em>[Switch to Interactive Dashboard > Genie Queries tab]</em></p>
+                        <p>"Instead of writing SQL, they ask in plain English:"</p>
+                    </div>
+
+                    <p><strong>Query 1:</strong> "Which triangles are showing deterioration above 10%?"</p>
+                    <p style="margin-left: 20px;">Genie returns 10 triangles: Motor VIC AY2020 at 217.8% variance - RED</p>
+
+                    <p style="margin-top: 15px;"><strong>Query 3:</strong> "Compare total incurred amounts by product"</p>
+                    <table style="margin-left: 20px; max-width: 600px;">
+                        <tr>
+                            <th>Product</th>
+                            <th>Total Incurred</th>
+                            <th>Paid Ratio</th>
+                        </tr>
+                        <tr>
+                            <td>CTP</td>
+                            <td>$33.4M</td>
+                            <td>58.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Motor</td>
+                            <td>$10.1M</td>
+                            <td>65.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Home</td>
+                            <td>$5.3M</td>
+                            <td>71.9%</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"See that CTP paid ratio? 58.6% - realistic for long-tail bodily injury. Takes years to settle.</p>
+                        <p>Actuaries get instant portfolio comparisons in plain English."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM 4 -->
+            <div class="section" id="problem4">
+                <h2>Problem 4: Data Quality & Trust <span class="timing">5 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> DLT Pipeline + SQL Editor
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>Before the CFO submits numbers to the board, or the actuary submits to APRA, the question is always: <strong>Can we trust these numbers?</strong></p>
+                    <p style="margin-top: 15px;"><strong>Pain points:</strong></p>
+                    <ul>
+                        <li>Data errors discovered after submission (embarrassing)</li>
+                        <li>DQ checks are external scripts - easy to bypass or forget</li>
+                        <li>No visibility into what data failed validation</li>
+                        <li>Records silently dropped - you never know what you lost</li>
+                    </ul>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 1: Embedded Data Quality (DQ as Code)</h4>
+
+                    <div class="talk-script">
+                        <p>"We've built 6 DQ expectations in the pipeline as code:"</p>
+                    </div>
+
+                    <p><strong>Policy expectations:</strong></p>
+                    <ol>
+                        <li><code>valid_dates</code>: Expiry date must be > Inception date</li>
+                        <li><code>valid_state</code>: State must be NSW, VIC, QLD, WA, SA, TAS, ACT, NT</li>
+                        <li><code>positive_premium</code>: Annual premium must be > 0</li>
+                    </ol>
+
+                    <p><strong>Claims expectations:</strong></p>
+                    <ol start="4">
+                        <li><code>incurred_gte_paid</code>: Incurred must be ≥ Paid (fundamental actuarial rule)</li>
+                        <li><code>valid_lodgement</code>: Lodgement date must be ≥ Accident date</li>
+                        <li><code>valid_status</code>: Status must be open, closed, or reopened</li>
+                    </ol>
+
+                    <div class="code-block">
+<pre>@dlt.expect_or_drop("incurred_gte_paid",
+                    "incurred_cumulative >= paid_cumulative")</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Version-controlled. Can't be bypassed. Always execute."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 2: Quarantine Pattern (Don't Drop, Investigate)</h4>
+
+                    <div class="code-block">
+<pre>SELECT * FROM actuary_corpfin.silver.dq_quarantine
+LIMIT 10</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"If a record fails validation, it goes to quarantine:</p>
+                        <ul>
+                            <li><code>error_type</code>: "future_lodgement" - claim lodged in the future</li>
+                            <li><code>entity_id</code>: CLM_00012345 - which claim failed</li>
+                            <li><code>error_message</code>: "Lodgement date 2027-05-15 is in the future"</li>
+                        </ul>
+                        <p><strong>Why quarantine instead of drop?</strong> Because actuaries need to investigate: data error? Valid exception? System bug?</p>
+                        <p>You can't investigate what you've deleted. Quarantine preserves evidence."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM 5 -->
+            <div class="section" id="problem5">
+                <h2>Problem 5: Speed & Efficiency <span class="timing">5 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> SQL Editor
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>In the traditional world:</p>
+                    <ul>
+                        <li>Rebuilding development triangles is an overnight batch job (4-8 hours)</li>
+                        <li>Actuaries wait until month-end to query the latest data</li>
+                        <li>Manual processes: export to Excel, copy/paste into board packs</li>
+                        <li>Can't answer "what's the CTP reserve right now?" - have to wait</li>
+                    </ul>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 1: Auto-Refreshing Analytics (No Batch Jobs)</h4>
+
+                    <div class="code-block">
+<pre>SELECT MAX(lodgement_date) as latest_claim
+FROM actuary_corpfin.bronze.claims_transactions_raw</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Latest claim: March 18, 2026 - that's today. It landed this morning."</p>
+                    </div>
+
+                    <div class="code-block">
+<pre>SELECT product, state, accident_year,
+       SUM(cumulative_incurred) as total_reserve
+FROM actuary_corpfin.gold.development_triangles
+WHERE product = 'CTP' AND state = 'NSW'
+GROUP BY product, state, accident_year
+ORDER BY accident_year DESC</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"This includes today's claim. The triangle has already refreshed.</p>
+                        <p>How? Claim lands → DLT pipeline detects → Silver validates → Gold recalculates → Actuary queries</p>
+                        <p><strong>No overnight batch. No waiting.</strong>"</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 3: Sub-Second Query Performance</h4>
+
+                    <div class="code-block">
+<pre>SELECT product, state, accident_year,
+       COUNT(*) as claim_count,
+       SUM(incurred_cumulative) as total_incurred,
+       AVG(development_month) as avg_development,
+       MAX(lodgement_date) as latest_lodgement
+FROM actuary_corpfin.bronze.claims_transactions_raw
+GROUP BY product, state, accident_year
+ORDER BY total_incurred DESC</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Execution time: <strong>0.8 seconds</strong></p>
+                        <p>37,000 claims, complex aggregation, sub-second response.</p>
+                        <p>And this scales to millions. Suncorp's full claims history - still sub-second."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM 6 -->
+            <div class="section" id="problem6">
+                <h2>Problem 6: Self-Service Analytics <span class="timing">7 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> Interactive Dashboard (Genie Queries tab)
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem: IT Bottleneck</h3>
+                    <p>Traditional workflow:</p>
+                    <ol>
+                        <li>Actuary emails IT: "Can you run a query showing deteriorating triangles?"</li>
+                        <li>IT queues the request - <strong>3 to 5 day turnaround</strong></li>
+                        <li>IT writes SQL, sends back Excel</li>
+                        <li>Actuary says "this isn't quite right - can you add state breakdown?"</li>
+                        <li>Another 3 days</li>
+                    </ol>
+                    <p style="margin-top: 15px;"><strong>Question:</strong> How do we make actuaries self-sufficient?</p>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution: Genie Natural Language Queries</h4>
+
+                    <div class="talk-script">
+                        <p>"Let me show you Genie - natural language analytics.</p>
+                        <p>Instead of emailing IT, actuaries type questions in plain English."</p>
+                    </div>
+
+                    <h4 style="margin-top: 25px;">Query 1: "Which triangles are showing deterioration above 10%?"</h4>
+                    <div class="talk-script">
+                        <p>Actuary types this in English. Genie:</p>
+                        <ol>
+                            <li>Translates to SQL</li>
+                            <li>Queries Unity Catalog</li>
+                            <li>Returns results in 5 seconds</li>
+                        </ol>
+                        <p>Result: 10 triangles found. Top: Motor VIC AY2020 at <strong>217.8% variance - RED</strong></p>
+                        <p>The actuary has their answer. No IT ticket. No waiting.</p>
+                    </div>
+
+                    <h4 style="margin-top: 25px;">Query 2: "What are the top 5 largest claims?"</h4>
+                    <div class="talk-script">
+                        <p>Genie returns: $1.59M CTP claim (top), instant board slide material.</p>
+                    </div>
+
+                    <h4 style="margin-top: 25px;">Query 4: "What percentage of large losses are still open?"</h4>
+                    <div class="talk-script">
+                        <p>Answer: <strong>43.8%</strong> (351 out of 802 claims)</p>
+                        <p>The actuary has instant answers to 4 complex questions. No SQL. No IT.</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Why This Matters</h4>
+                    <table>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Time</th>
+                        </tr>
+                        <tr>
+                            <td>Traditional: Question → IT ticket → Excel → revision → another ticket</td>
+                            <td><strong>1-2 weeks</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Genie: Question → result → follow-up → result</td>
+                            <td><strong>30 seconds</strong></td>
+                        </tr>
+                    </table>
+                    <div class="talk-script">
+                        <p>"Actuaries become self-sufficient. IT focuses on platform, not ad-hoc queries."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM 7 -->
+            <div class="section" id="problem7">
+                <h2>Problem 7: Audit & Historical Reconstruction <span class="timing">3 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> Unity Catalog (History tab) + SQL Editor
+                </div>
+
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>The auditor asks:</p>
+                    <ul>
+                        <li>"What reserve did you hold for Motor NSW in Q2 2025?"</li>
+                        <li>"Prove you submitted this exact number to APRA."</li>
+                        <li>"Compare your Q4 2025 triangle to your Q1 2026 triangle - what changed?"</li>
+                    </ul>
+                    <p style="margin-top: 15px;">In the traditional world: Manual snapshots, re-running jobs, no guarantee of reproducibility</p>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 1: Time Travel - Reconstruct Any Prior State</h4>
+
+                    <div class="code-block">
+<pre>SELECT * FROM actuary_corpfin.gold.development_triangles
+TIMESTAMP AS OF '2025-06-30T23:59:59Z'
+WHERE product = 'Motor' AND state = 'NSW'</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"This returns exactly what existed on June 30, 2025.</p>
+                        <p>Not a re-run. Not a snapshot. The actual versioned state."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>Solution 2: Variance Analysis Across Quarters</h4>
+
+                    <div class="code-block">
+<pre>SELECT
+    q1.accident_year,
+    q1.cumulative_incurred as q1_incurred,
+    q4.cumulative_incurred as q4_incurred,
+    (q1.cumulative_incurred - q4.cumulative_incurred) as movement
+FROM actuary_corpfin.gold.development_triangles
+     TIMESTAMP AS OF '2026-03-31' q1
+JOIN actuary_corpfin.gold.development_triangles
+     TIMESTAMP AS OF '2025-12-31' q4
+    ON q1.product = q4.product
+    AND q1.accident_year = q4.accident_year
+WHERE q1.product = 'Motor' AND q1.state = 'NSW'
+ORDER BY ABS(movement) DESC</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"This shows exactly which accident years drove reserve movements between quarters.</p>
+                        <p><strong>Instant variance analysis.</strong> No manual Excel diffs."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WRAP-UP -->
+            <div class="section" id="wrapup">
+                <h2>Wrap-Up & Q&A <span class="timing">2 minutes</span></h2>
+
+                <div class="screen-indicator">
+                    <strong>SCREEN:</strong> Interactive Dashboard (Overview tab)
+                </div>
+
+                <h3>Summary: Seven Problems Solved</h3>
+
+                <table>
+                    <tr>
+                        <th>Problem</th>
+                        <th>Solution</th>
+                    </tr>
+                    <tr>
+                        <td>1. Regulatory Compliance</td>
+                        <td>IFRS 17 cohorts, time travel, complete lineage, audit trail</td>
+                    </tr>
+                    <tr>
+                        <td>2. Board Reporting</td>
+                        <td>Large loss register (802 claims), deterioration explanations</td>
+                    </tr>
+                    <tr>
+                        <td>3. Reserve Adequacy</td>
+                        <td>Auto-refreshing triangles (399 cells), 44 RED alerts, anomaly detection</td>
+                    </tr>
+                    <tr>
+                        <td>4. Data Quality</td>
+                        <td>6 embedded DQ checks, quarantine pattern, audit trail</td>
+                    </tr>
+                    <tr>
+                        <td>5. Speed</td>
+                        <td>No batch jobs, live data, sub-second queries</td>
+                    </tr>
+                    <tr>
+                        <td>6. Self-Service</td>
+                        <td>Genie natural language, Unity Catalog discovery, pre-built dashboards</td>
+                    </tr>
+                    <tr>
+                        <td>7. Audit</td>
+                        <td>Time travel to any quarter, variance analysis, regulatory proof</td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 30px;">What This Means for Suncorp</h3>
+
+                <div class="talk-script">
+                    <p>"You asked: What can Databricks deliver for Finance Actuarial outcomes?</p>
+                    <p>The answer is:</p>
+                    <ul>
+                        <li><strong>Trust:</strong> Embedded DQ, quarantine, complete lineage</li>
+                        <li><strong>Speed:</strong> Triangles refresh in seconds</li>
+                        <li><strong>Compliance:</strong> Time travel for APRA audit, automatic versioning</li>
+                        <li><strong>Self-Service:</strong> Actuaries ask Genie, not IT</li>
+                        <li><strong>Unified Platform:</strong> All data, all analytics, one catalog</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-top: 30px;">What's Running Today</h3>
+
+                <div class="talk-script">
+                    <p>"Everything you saw is running in your workspace:</p>
+                    <ul>
+                        <li><strong>Workspace:</strong> e2-demo-field-eng.cloud.databricks.com</li>
+                        <li><strong>Catalog:</strong> actuary_corpfin</li>
+                        <li><strong>Data:</strong> 10,000 policies, 37,437 claims</li>
+                    </ul>
+                    <p>This isn't a proof of concept. It's production-ready."</p>
+                </div>
+
+                <div class="tips">
+                    <h4>Interactive Dashboard</h4>
+                    <p><strong>URL:</strong> <a href="https://pravinva.github.io/actuary-demo/" target="_blank">https://pravinva.github.io/actuary-demo/</a></p>
+                    <p>Walk through the Genie queries, DQ patterns, time travel examples. Share with your team.</p>
+                </div>
+
+                <h3 style="margin-top: 30px;">Transition to Q&A</h3>
+
+                <div class="talk-script">
+                    <p>"That's the tour. I'm happy to dive deeper into any area - DQ patterns, integration architecture, Genie setup, whatever's on your mind.</p>
+                    <p><strong>What questions do you have?</strong>"</p>
+                </div>
+            </div>
+
+            <!-- BACKUP Q&A -->
+            <div class="section">
+                <h2>Backup: Q&A Topics</h2>
+
+                <div class="solution-box">
+                    <h4>If Asked: "How do we integrate with existing systems?"</h4>
+                    <div class="talk-script">
+                        <p>"Great question. For Finance Actuarial, you typically have 4 source systems:</p>
+                        <ol>
+                            <li><strong>Policy Admin System</strong> - extract policy cohorts → land in Bronze via JDBC connector or file drop</li>
+                            <li><strong>Claims System</strong> - claims transactions → Bronze via streaming or batch</li>
+                            <li><strong>Reinsurance Platform</strong> - treaty data → Bronze via API or file</li>
+                            <li><strong>Finance/Treasury</strong> - risk-free rate curves → Bronze via scheduled job</li>
+                        </ol>
+                        <p>DLT handles all ingestion patterns. We can connect to your existing systems without replacing them."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>If Asked: "What about off-the-shelf reserving tool integration?"</h4>
+                    <div class="talk-script">
+                        <p>"Two patterns:</p>
+                        <p><strong>Pattern 1: Databricks feeds the tool</strong></p>
+                        <ul>
+                            <li>Gold tables (triangles, cohorts) export to the tool's input format</li>
+                            <li>Tool runs projections, writes results back to Databricks</li>
+                            <li>Unity Catalog as system of record</li>
+                        </ul>
+                        <p><strong>Pattern 2: Tool as computation engine</strong></p>
+                        <ul>
+                            <li>Databricks prepares data, invokes tool API, ingests results</li>
+                            <li>Complete workflow orchestrated in Databricks Jobs</li>
+                        </ul>
+                        <p>Either way, Databricks is the data platform. The tool is computation."</p>
+                    </div>
+                </div>
+
+                <div class="solution-box">
+                    <h4>If Asked: "Can we build reserving models in Databricks instead of buying a tool?"</h4>
+                    <div class="talk-script">
+                        <p>"Absolutely. Options:</p>
+                        <ul>
+                            <li><strong>Option 1:</strong> Python reserving libraries (ChainLadder, Ratemaker) in Databricks notebooks</li>
+                            <li><strong>Option 2:</strong> MLflow for IBNR predictions - train models on historical triangles</li>
+                            <li><strong>Option 3:</strong> Monte Carlo simulations - Spark parallelizes 10,000 scenarios</li>
+                        </ul>
+                        <p><strong>Build vs Buy trade-off:</strong></p>
+                        <ul>
+                            <li><strong>Buy:</strong> Faster deployment, vendor support, regulatory-approved</li>
+                            <li><strong>Build:</strong> Full customization, no licensing costs, integrated with platform</li>
+                        </ul>
+                        <p>Depends on your risk appetite and timeline."</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p><strong>Finance Actuarial Demo Talk Track</strong></p>
+            <p style="margin-top: 10px; opacity: 0.8;">
+                45-Minute Problem-Focused Presentation
+            </p>
+            <p style="margin-top: 15px; font-size: 0.9em;">
+                Workspace: e2-demo-field-eng.cloud.databricks.com |
+                Catalog: actuary_corpfin |
+                Build Date: 2026-03-17
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
