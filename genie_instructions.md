@@ -2,8 +2,8 @@
 # Finance Actuarial Genie Space
 
 **Space Name:** Finance Actuarial Analytics
-**Space ID:** 01f1225bb489165aa883cbbb7eed64e4
-**URL:** https://e2-demo-field-eng.cloud.databricks.com/explore/genie/01f1225bb489165aa883cbbb7eed64e4
+**Space ID:** 01f1225cb62218668d16941d566082e4
+**URL:** https://e2-demo-field-eng.cloud.databricks.com/explore/genie/01f1225cb62218668d16941d566082e4
 **Warehouse:** 4b9b953939869799
 
 This Genie space provides natural language access to actuarial analytics for insurance portfolio monitoring.
