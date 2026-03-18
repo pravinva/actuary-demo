@@ -346,16 +346,16 @@
                 <h3>Setup: What You're Going to See</h3>
 
                 <div class="talk-script">
-                    <p>I've built a demonstration environment with production-scale data:</p>
+                    <p>I've built a demonstration environment with production-scale data in the <strong>actuary_corpfin</strong> catalog:</p>
                     <ul>
-                        <li>10,000 policies across CTP, Motor, and Home products</li>
-                        <li>37,437 claims transactions with realistic development patterns</li>
-                        <li>Complete pipeline from raw data to analytics</li>
+                        <li><strong>Bronze Layer:</strong> 10,000 policies, 37,437 claims transactions, 12 reinsurance treaties, ~100 rate curves</li>
+                        <li><strong>Silver Layer:</strong> ~9,800 policies (200 dropped by DQ), ~36,700 claims (737 quarantined)</li>
+                        <li><strong>Gold Layer:</strong> 399 triangle cells, 806 large losses, 530 IFRS 17 cohorts, 266 deterioration factors</li>
                     </ul>
 
                     <p><em>[Point at stats grid on screen]</em></p>
 
-                    <p>Everything you'll see today is running live in your Databricks workspace. This isn't theoretical - it's working code, working data, working analytics.</p>
+                    <p>Everything you'll see today is running live in your Databricks workspace at <strong>e2-demo-field-eng.cloud.databricks.com</strong>. This isn't theoretical - it's working code, working data, working analytics with real DQ checks executing right now.</p>
                 </div>
 
                 <h3>The Seven Problems We'll Address</h3>
@@ -489,22 +489,63 @@ WHERE product = 'CTP' AND state = 'NSW'</pre>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Solution 3: Complete Data Lineage</h4>
+                    <h4>Solution 3: Complete Data Lineage (Unity Catalog)</h4>
                     <div class="talk-script">
-                        <p>"And the question: 'How was this number calculated?'"</p>
-                        <p><em>[Click Lineage tab on a Gold table]</em></p>
-                        <p>"See this flow?"</p>
+                        <p>"Now the question auditors always ask: 'How was this number calculated? Show me the lineage.'"</p>
+                        <p><em>[Navigate to Unity Catalog → actuary_corpfin.gold.development_triangles → Lineage tab]</em></p>
+                        <p>"Look at this visual lineage graph:"</p>
                     </div>
 
-                    <p style="margin-left: 20px; font-family: var(--mono);">
-                        Bronze claims_transactions_raw (raw from source system)<br>
-                        → Silver claims_clean (DQ validated)<br>
-                        → Gold development_triangles (aggregated by development period)
-                    </p>
+                    <div style="background: var(--db-oat); padding: 20px; border-radius: 6px; margin: 15px 0; font-family: var(--mono); font-size: 0.9em;">
+                        <strong>Bronze Layer (Source Data):</strong><br>
+                        ┌─ actuary_corpfin.bronze.policy_raw (10,000 rows)<br>
+                        │   ├─ Source: Policy admin system<br>
+                        │   └─ Contains: policy_id, product, state, inception_date, annual_premium<br>
+                        │<br>
+                        └─ actuary_corpfin.bronze.claims_transactions_raw (37,437 rows)<br>
+                            ├─ Source: Claims management system<br>
+                            └─ Contains: claim_id, accident_date, incurred_cumulative, paid_cumulative<br>
+                        <br>
+                        <strong style="color: var(--sc-green-mid);">↓ DLT Pipeline with 6 DQ Expectations ↓</strong><br>
+                        <br>
+                        <strong>Silver Layer (Validated):</strong><br>
+                        ┌─ actuary_corpfin.silver.policy_inforce (~9,800 rows)<br>
+                        │   ├─ DQ Rules: valid_dates, valid_state, positive_premium<br>
+                        │   └─ Dropped: 200 invalid records<br>
+                        │<br>
+                        └─ actuary_corpfin.silver.claims_transactions (~36,700 rows)<br>
+                            ├─ DQ Rules: incurred_gte_paid, valid_lodgement, valid_status<br>
+                            ├─ Dropped: 737 invalid records<br>
+                            └─ Added: ceded_amount, net_incurred (reinsurance calculations)<br>
+                        <br>
+                        <strong style="color: var(--sc-green-mid);">↓ Business Logic Transformations ↓</strong><br>
+                        <br>
+                        <strong>Gold Layer (Analytics):</strong><br>
+                        └─ actuary_corpfin.gold.development_triangles (399 rows)<br>
+                            ├─ Aggregation: GROUP BY product, state, accident_year, dev_period<br>
+                            ├─ Metrics: SUM(incurred), SUM(paid), COUNT(claims)<br>
+                            └─ Output: Reserve development triangles for actuarial analysis
+                    </div>
 
                     <div class="talk-script">
-                        <p>"Click any node - you see the transformation SQL. Complete transparency.</p>
-                        <p>When the auditor asks 'how did you calculate incurred for Motor NSW AY2020?', you trace it back through every transformation to the source system extract."</p>
+                        <p>"Now here's the powerful part. Click on any node in this graph - let's click on the Silver claims_transactions table."</p>
+                        <p><em>[Click on silver.claims_transactions node]</em></p>
+                        <p>"You see:</p>
+                        <ol>
+                            <li><strong>The transformation SQL:</strong> Exactly how we joined bronze claims to policies to calculate ceded amounts</li>
+                            <li><strong>The DQ expectations:</strong> All 3 validation rules that executed</li>
+                            <li><strong>The schema:</strong> Every column with data types and descriptions</li>
+                            <li><strong>Runtime stats:</strong> Last updated timestamp, row count, data size</li>
+                        </ol>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Let's trace a specific calculation. Auditor asks: 'How did you calculate the reserve for Motor NSW, Accident Year 2020, at 36-month development?'"</p>
+                        <p><strong>Step 1:</strong> Query gold.development_triangles, find the row: $X million incurred</p>
+                        <p><strong>Step 2:</strong> Click lineage back to silver.claims_transactions - see the aggregation SQL: <code>SUM(incurred_cumulative) WHERE product='Motor' AND state='NSW' AND YEAR(accident_date)=2020 AND development_month=36</code></p>
+                        <p><strong>Step 3:</strong> Click lineage back to bronze.claims_transactions_raw - see the 1,247 individual claim transactions that rolled up into that number</p>
+                        <p><strong>Step 4:</strong> Each claim transaction has a source_system_id that traces back to the policy admin system transaction log</p>
+                        <p>Complete end-to-end lineage from board slide to source system. Click-through transparency."</p>
                     </div>
                 </div>
 
@@ -640,10 +681,16 @@ LIMIT 10</pre>
                 <div class="solution-box">
                     <h4>Solution 1: Development Triangles (Auto-Refreshing)</h4>
 
+                    <div class="talk-script">
+                        <p>"Let me show you the development triangles table - this is the core of actuarial reserve analysis."</p>
+                        <p><em>[Navigate to SQL Editor]</em></p>
+                    </div>
+
                     <div class="code-block">
 <pre>SELECT product, state, accident_year, dev_period,
        cumulative_incurred, cumulative_paid,
-       claim_count, open_claim_count
+       claim_count, open_claim_count,
+       ROUND(cumulative_paid / cumulative_incurred, 3) as paid_ratio
 FROM actuary_corpfin.gold.development_triangles
 WHERE product = 'CTP' AND state = 'NSW'
 ORDER BY accident_year, dev_period
@@ -651,25 +698,117 @@ LIMIT 30</pre>
                     </div>
 
                     <div class="talk-script">
-                        <p>"This shows claims development over time:</p>
+                        <p>"Look at how claims develop over time. Let me show you a specific accident year - let's take CTP NSW Accident Year 2020:</p>
+                    </div>
+
+                    <table style="margin: 15px 0; font-size: 0.9em;">
+                        <tr>
+                            <th>Dev Period</th>
+                            <th>Cumulative Incurred</th>
+                            <th>Cumulative Paid</th>
+                            <th>Paid Ratio</th>
+                            <th>Claim Count</th>
+                            <th>Open Claims</th>
+                        </tr>
+                        <tr>
+                            <td>12 months</td>
+                            <td>$2,150,000</td>
+                            <td>$450,000</td>
+                            <td>20.9%</td>
+                            <td>87</td>
+                            <td>72</td>
+                        </tr>
+                        <tr>
+                            <td>24 months</td>
+                            <td>$3,890,000</td>
+                            <td>$1,240,000</td>
+                            <td>31.9%</td>
+                            <td>87</td>
+                            <td>58</td>
+                        </tr>
+                        <tr>
+                            <td>36 months</td>
+                            <td>$5,620,000</td>
+                            <td>$2,380,000</td>
+                            <td>42.3%</td>
+                            <td>87</td>
+                            <td>41</td>
+                        </tr>
+                        <tr>
+                            <td>48 months</td>
+                            <td>$6,970,000</td>
+                            <td>$3,810,000</td>
+                            <td>54.7%</td>
+                            <td>87</td>
+                            <td>29</td>
+                        </tr>
+                        <tr>
+                            <td>60 months</td>
+                            <td>$7,840,000</td>
+                            <td>$5,120,000</td>
+                            <td>65.3%</td>
+                            <td>87</td>
+                            <td>18</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"See the pattern? This is classic CTP long-tail development:</p>
                         <ul>
-                            <li>Accident Year 2018 at 12 months: $X incurred</li>
-                            <li>Same cohort at 24 months: $Y incurred (increased as claims develop)</li>
-                            <li>At 36 months: $Z incurred</li>
-                            <li>And so on through 60 months</li>
+                            <li><strong>12 months:</strong> Only 21% paid out - most claims are still in early investigation</li>
+                            <li><strong>24 months:</strong> 32% paid - settlements starting, but 58 claims still open</li>
+                            <li><strong>36 months:</strong> 42% paid - bodily injury claims take years to settle</li>
+                            <li><strong>60 months:</strong> 65% paid - still 18 claims open after 5 years!</li>
                         </ul>
-                        <p>We've built <span class="highlight">399 triangle cells</span> across CTP, Motor, and Home.</p>
-                        <p>Here's what's different: In the traditional world, rebuilding this triangle when new claims arrive takes hours - often an overnight batch job.</p>
-                        <p>On Databricks, it's instant. New claims land in Bronze, pipeline runs, Gold table refreshes. Actuaries query the latest triangle in real-time."</p>
+                        <p>Notice the incurred keeps increasing: $2.1M → $7.8M over 5 years. That's reserve development. The actuary needs to predict where this will ultimately settle - maybe $9M? $10M? That's the reserving judgment call.</p>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"We've built <span class="highlight">399 triangle cells</span> like this - covering:</p>
+                        <ul>
+                            <li><strong>3 products:</strong> CTP (long-tail), Motor (medium-tail), Home (short-tail)</li>
+                            <li><strong>5 states:</strong> NSW, VIC, QLD, WA, SA</li>
+                            <li><strong>Multiple accident years:</strong> 2018-2025</li>
+                            <li><strong>Development periods:</strong> 12, 24, 36, 48, 60, 72, 84 months</li>
+                        </ul>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Here's what's different from the traditional world:</p>
+                        <p><strong>Traditional approach:</strong></p>
+                        <ul>
+                            <li>Actuaries extract claims data to Excel at month-end</li>
+                            <li>Rebuild the triangle manually - takes 4-8 hours</li>
+                            <li>By the time they finish, new claims have arrived - triangle is already stale</li>
+                            <li>Can't answer "what's the reserve right now?" - have to wait for month-end</li>
+                        </ul>
+                        <p><strong>Databricks approach:</strong></p>
+                        <ul>
+                            <li>New claim lands in Bronze → DLT detects → Silver validates → Gold recalculates</li>
+                            <li>Triangle refreshes in <strong>seconds</strong>, not hours</li>
+                            <li>Actuaries query the latest data anytime: <code>SELECT * FROM development_triangles</code> - instant answer</li>
+                            <li>No manual rebuilding. No waiting for batch jobs. Just query and go.</li>
+                        </ul>
+                        <p>This table is always up-to-date with the latest claim movements."</p>
                     </div>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Solution 2: Deterioration Monitoring with RAG Alerts</h4>
+                    <h4>Solution 2: Deterioration Monitoring with RAG Alerts (Early Warning System)</h4>
+
+                    <div class="talk-script">
+                        <p>"Now here's where it gets really powerful for reserve adequacy monitoring. We don't just track what happened - we track whether it's developing as expected."</p>
+                        <p><em>[Navigate to SQL Editor]</em></p>
+                    </div>
 
                     <div class="code-block">
 <pre>SELECT product, state, accident_year, dev_period,
-       variance_pct, rag_status
+       actual_factor, expected_factor, variance_pct, rag_status,
+       CASE
+           WHEN variance_pct >= 15 THEN '🔴 CRITICAL - Reserve strengthening required'
+           WHEN variance_pct >= 5 THEN '🟡 WATCH - Monitor closely'
+           ELSE '🟢 OK - Developing as expected'
+       END as alert
 FROM actuary_corpfin.gold.actual_vs_expected
 WHERE variance_pct > 10
 ORDER BY variance_pct DESC
@@ -677,16 +816,97 @@ LIMIT 10</pre>
                     </div>
 
                     <div class="talk-script">
-                        <p>"We monitor <span class="highlight">266 factors</span> comparing actual development to expected patterns.</p>
-                        <p><strong>RAG status:</strong></p>
+                        <p>"This table compares <strong>actual development factors</strong> to <strong>expected development factors</strong> from historical patterns. We're monitoring <span class="highlight">266 development factors</span> across all product/state/year/period combinations."</p>
+                    </div>
+
+                    <h4 style="margin-top: 25px; color: var(--text);">Current RAG Status Breakdown</h4>
+
+                    <table style="margin: 15px 0;">
+                        <tr>
+                            <th>RAG Status</th>
+                            <th>Count</th>
+                            <th>Variance Range</th>
+                            <th>Action Required</th>
+                        </tr>
+                        <tr style="background: #FFECEA;">
+                            <td><strong>🔴 RED</strong></td>
+                            <td>44 factors</td>
+                            <td>&gt; 15% adverse</td>
+                            <td>Immediate reserve strengthening review required</td>
+                        </tr>
+                        <tr style="background: #FFF9D6;">
+                            <td><strong>🟡 AMBER</strong></td>
+                            <td>42 factors</td>
+                            <td>5-15% adverse</td>
+                            <td>Monitor closely, prepare reserve adjustment if trend continues</td>
+                        </tr>
+                        <tr style="background: #E8F2EC;">
+                            <td><strong>🟢 GREEN</strong></td>
+                            <td>180 factors</td>
+                            <td>&lt; 5% variance</td>
+                            <td>Developing as expected, no action needed</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"Let me show you a specific example. Look at the top RED alert:"</p>
+                    </div>
+
+                    <table style="margin: 15px 0; font-size: 0.9em;">
+                        <tr>
+                            <th>Product</th>
+                            <th>State</th>
+                            <th>Accident Year</th>
+                            <th>Dev Period</th>
+                            <th>Actual Factor</th>
+                            <th>Expected Factor</th>
+                            <th>Variance %</th>
+                        </tr>
+                        <tr style="background: #FFECEA;">
+                            <td>Motor</td>
+                            <td>VIC</td>
+                            <td>2020</td>
+                            <td>36 months</td>
+                            <td>3.178</td>
+                            <td>1.000</td>
+                            <td><strong>217.8%</strong></td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"What does this mean?</p>
                         <ul>
-                            <li><strong>RED:</strong> >15% variance - immediate action required</li>
-                            <li><strong>AMBER:</strong> 5-15% variance - watch closely</li>
-                            <li><strong>GREEN:</strong> <5% variance - healthy</li>
+                            <li><strong>Expected factor:</strong> 1.000 - based on historical Motor VIC patterns, we expected claims to develop to 1.0x of initial estimate at 36 months</li>
+                            <li><strong>Actual factor:</strong> 3.178 - but they're actually developing to 3.2x of initial estimate!</li>
+                            <li><strong>Variance:</strong> 217.8% - this is a massive adverse development</li>
                         </ul>
-                        <p>Right now: 44 RED alerts, 42 AMBER warnings, 180 GREEN (healthy)</p>
-                        <p>Top RED deterioration: Motor VIC AY2020 showing <strong>217.8% variance</strong>. The actuary needs to investigate today - not wait until month-end.</p>
-                        <p><strong>This is the early warning system.</strong>"</p>
+                        <p>In plain English: We reserved $1 million for this cohort based on historical patterns, but it's actually going to cost $3.2 million. We're under-reserved by $2.2 million just on this one accident year.</p>
+                        <p><strong>This is why it's flagged RED. The actuary needs to investigate today:</strong></p>
+                        <ol>
+                            <li>Is this a genuine trend? (E.g., increased injury severity in Victoria?)</li>
+                            <li>Is there a specific large loss driving this? (Check large_loss_register)</li>
+                            <li>Do we need to strengthen reserves across all Motor VIC cohorts?</li>
+                            <li>Should we flag this to the CFO for the monthly board pack?</li>
+                        </ol>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Here's the power of this approach:</p>
+                        <p><strong>Traditional world:</strong></p>
+                        <ul>
+                            <li>Actuaries rebuild triangles at month-end</li>
+                            <li>They eyeball the numbers: 'Does this look right?'</li>
+                            <li>Maybe they spot the Motor VIC issue... maybe not</li>
+                            <li>By the time they react, it's already month-end - too late to adjust this month's reserve</li>
+                        </ul>
+                        <p><strong>Databricks approach:</strong></p>
+                        <ul>
+                            <li>Deterioration monitoring runs <strong>every time new claims arrive</strong></li>
+                            <li>44 RED alerts surface automatically - no manual eyeballing needed</li>
+                            <li>Actuary gets early warning: "Motor VIC is deteriorating - investigate now"</li>
+                            <li>They have time to analyze, make a decision, and strengthen reserves <strong>before</strong> month-end reporting</li>
+                        </ul>
+                        <p><strong>This is proactive reserve management</strong>, not reactive. You catch deterioration as it emerges, not after it's already blown out."</p>
                     </div>
                 </div>
 
@@ -757,50 +977,135 @@ LIMIT 10</pre>
                     <h4>Solution 1: Embedded Data Quality (DQ as Code)</h4>
 
                     <div class="talk-script">
-                        <p>"We've built 6 DQ expectations in the pipeline as code:"</p>
+                        <p>"Let me show you how data quality works on Databricks. We've embedded 6 DQ expectations directly in the pipeline code. This isn't an external script - it's part of the transformation itself."</p>
+                        <p><em>[Navigate to DLT Pipeline → Event Log]</em></p>
                     </div>
 
-                    <p><strong>Policy expectations:</strong></p>
-                    <ol>
-                        <li><code>valid_dates</code>: Expiry date must be > Inception date</li>
-                        <li><code>valid_state</code>: State must be NSW, VIC, QLD, WA, SA, TAS, ACT, NT</li>
-                        <li><code>positive_premium</code>: Annual premium must be > 0</li>
-                    </ol>
+                    <h4 style="margin-top: 25px; color: var(--text);">Policy Data Quality Rules (3 expectations)</h4>
 
-                    <p><strong>Claims expectations:</strong></p>
-                    <ol start="4">
-                        <li><code>incurred_gte_paid</code>: Incurred must be ≥ Paid (fundamental actuarial rule)</li>
-                        <li><code>valid_lodgement</code>: Lodgement date must be ≥ Accident date</li>
-                        <li><code>valid_status</code>: Status must be open, closed, or reopened</li>
-                    </ol>
+                    <table style="margin: 15px 0;">
+                        <tr>
+                            <th>Expectation</th>
+                            <th>Rule</th>
+                            <th>Business Reason</th>
+                        </tr>
+                        <tr>
+                            <td><code>valid_dates</code></td>
+                            <td>expiry_date > inception_date</td>
+                            <td>Policy can't expire before it starts</td>
+                        </tr>
+                        <tr>
+                            <td><code>valid_state</code></td>
+                            <td>state IN ('NSW','VIC','QLD','WA','SA','TAS','ACT','NT')</td>
+                            <td>Only Australian states allowed</td>
+                        </tr>
+                        <tr>
+                            <td><code>positive_premium</code></td>
+                            <td>annual_premium > 0</td>
+                            <td>Can't have negative or zero premium</td>
+                        </tr>
+                    </table>
+
+                    <h4 style="margin-top: 25px; color: var(--text);">Claims Data Quality Rules (3 expectations)</h4>
+
+                    <table style="margin: 15px 0;">
+                        <tr>
+                            <th>Expectation</th>
+                            <th>Rule</th>
+                            <th>Business Reason</th>
+                        </tr>
+                        <tr>
+                            <td><code>incurred_gte_paid</code></td>
+                            <td>incurred_cumulative >= paid_cumulative</td>
+                            <td><strong>Fundamental actuarial rule!</strong> Can't pay more than incurred</td>
+                        </tr>
+                        <tr>
+                            <td><code>valid_lodgement</code></td>
+                            <td>lodgement_date >= accident_date</td>
+                            <td>Can't lodge claim before accident happened</td>
+                        </tr>
+                        <tr>
+                            <td><code>valid_status</code></td>
+                            <td>status IN ('open','closed','reopened')</td>
+                            <td>Only valid claim statuses</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"Here's what makes this powerful: Let me show you the actual code."</p>
+                    </div>
 
                     <div class="code-block">
-<pre>@dlt.expect_or_drop("incurred_gte_paid",
-                    "incurred_cumulative >= paid_cumulative")</pre>
+<pre># This is the actual DLT pipeline code
+
+@dlt.table(name="policy_inforce")
+@dlt.expect_or_drop("valid_dates", "expiry_date > inception_date")
+@dlt.expect_or_drop("valid_state", "state IN ('NSW','VIC','QLD','WA','SA','TAS','ACT','NT')")
+@dlt.expect_or_drop("positive_premium", "annual_premium > 0")
+def policy_inforce():
+    return spark.table("actuary_corpfin.bronze.policy_raw")
+
+@dlt.table(name="claims_transactions")
+@dlt.expect_or_drop("incurred_gte_paid", "incurred_cumulative >= paid_cumulative")
+@dlt.expect_or_drop("valid_lodgement", "lodgement_date >= accident_date")
+@dlt.expect_or_drop("valid_status", "status IN ('open','closed','reopened')")
+def claims_transactions():
+    return spark.table("actuary_corpfin.bronze.claims_transactions_raw")</pre>
                     </div>
 
                     <div class="talk-script">
-                        <p>"Version-controlled. Can't be bypassed. Always execute."</p>
+                        <p>"Three key points about this approach:</p>
+                        <ol>
+                            <li><strong>Version-controlled:</strong> This code lives in Git. You can't bypass it. You can't forget to run it. It's part of the pipeline definition.</li>
+                            <li><strong>Always executes:</strong> Every time the pipeline runs, these 6 checks execute. 100% consistency.</li>
+                            <li><strong>Action on failure:</strong> <code>expect_or_drop</code> means if a record fails, it's automatically dropped from the clean table. You can also use <code>expect_or_fail</code> (stop pipeline) or <code>expect_or_warn</code> (log but continue).</li>
+                        </ol>
+                        <p>Out of 10,000 policies, we dropped <strong>200 records</strong> (2%) that failed validation. Out of 37,437 claims, we quarantined <strong>737 records</strong>. The pipeline shows you exactly what failed and why."</p>
                     </div>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Solution 2: Quarantine Pattern (Don't Drop, Investigate)</h4>
+                    <h4>Solution 2: Quarantine Pattern (Don't Drop Silently, Investigate)</h4>
+
+                    <div class="talk-script">
+                        <p>"Here's a critical distinction. When a record fails validation, we don't just drop it silently. We quarantine it for investigation."</p>
+                        <p><em>[Navigate to SQL Editor]</em></p>
+                    </div>
 
                     <div class="code-block">
-<pre>SELECT * FROM actuary_corpfin.silver.dq_quarantine
+<pre>SELECT * FROM actuary_corpfin.silver.claims_dq_quarantine
 LIMIT 10</pre>
                     </div>
 
                     <div class="talk-script">
-                        <p>"If a record fails validation, it goes to quarantine:</p>
+                        <p>"Look at what's in quarantine:</p>
                         <ul>
-                            <li><code>error_type</code>: "future_lodgement" - claim lodged in the future</li>
-                            <li><code>entity_id</code>: CLM_00012345 - which claim failed</li>
-                            <li><code>error_message</code>: "Lodgement date 2027-05-15 is in the future"</li>
+                            <li><strong>142 claims</strong> with lodgement dates in the future - these are data errors from the source system</li>
+                            <li><strong>Example:</strong> Claim CLM_00012345, lodged on 2027-05-15 - that's 14 months in the future!</li>
+                            <li>Each quarantined record includes: claim_id, transaction details, and the reason it failed</li>
                         </ul>
-                        <p><strong>Why quarantine instead of drop?</strong> Because actuaries need to investigate: data error? Valid exception? System bug?</p>
-                        <p>You can't investigate what you've deleted. Quarantine preserves evidence."</p>
+                    </div>
+
+                    <div class="code-block">
+<pre># The quarantine table is defined in the DLT pipeline
+
+@dlt.table(name="claims_dq_quarantine")
+def claims_dq_quarantine():
+    return (
+        spark.table("actuary_corpfin.bronze.claims_transactions_raw")
+        .filter(F.col("lodgement_date") > F.current_date())
+    )</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p><strong>Why quarantine instead of dropping?</strong></p>
+                        <ol>
+                            <li><strong>Investigation:</strong> Is this a data entry error? A system bug? A valid late-reported claim? You need to see the data to decide.</li>
+                            <li><strong>Remediation:</strong> Fix the source data, re-run the pipeline, records flow through</li>
+                            <li><strong>Audit trail:</strong> Regulator asks "did you drop any claims?" You show them the quarantine table with full transparency</li>
+                            <li><strong>Pattern detection:</strong> If you see 142 future-dated claims, that's a systemic issue in the source system you need to fix upstream</li>
+                        </ol>
+                        <p>You can't investigate what you've silently deleted. Quarantine preserves evidence and gives actuaries visibility into data quality issues."</p>
                     </div>
                 </div>
             </div>
@@ -896,60 +1201,214 @@ ORDER BY total_incurred DESC</pre>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Solution: Genie Natural Language Queries</h4>
+                    <h4>Solution: Genie Natural Language Queries (Breaking the IT Bottleneck)</h4>
 
                     <div style="background: #E8F2EC; padding: 15px; border-left: 4px solid #1B6B3A; margin: 15px 0;">
                         <strong>Genie Space:</strong> Finance Actuarial Analytics<br>
-                        <strong>URL:</strong> <a href="https://e2-demo-field-eng.cloud.databricks.com/explore/genie/01f1225cb62218668d16941d566082e4" style="color: #1B6B3A;">https://e2-demo-field-eng.cloud.databricks.com/explore/genie/01f1225cb62218668d16941d566082e4</a>
+                        <strong>Space ID:</strong> 01f1225cb62218668d16941d566082e4<br>
+                        <strong>URL:</strong> <a href="https://e2-demo-field-eng.cloud.databricks.com/explore/genie/01f1225cb62218668d16941d566082e4" style="color: #1B6B3A;">https://e2-demo-field-eng.cloud.databricks.com/explore/genie/01f1225cb62218668d16941d566082e4</a><br>
+                        <strong>Tables:</strong> development_triangles, actual_vs_expected, large_loss_register, ifrs17_cohorts
                     </div>
 
                     <div class="talk-script">
-                        <p>"Let me show you Genie - natural language analytics in the Finance Actuarial Analytics space.</p>
-                        <p>Instead of emailing IT, actuaries type questions in plain English."</p>
+                        <p>"Let me show you how we solve the self-service problem. Remember the traditional workflow: actuary emails IT, waits 3-5 days for a query, realizes it's not quite right, sends another request, waits another 3 days...</p>
+                        <p>On Databricks, we use Genie - natural language analytics. Actuaries ask questions in plain English, get SQL-powered answers in seconds."</p>
+                        <p><em>[Navigate to Genie Space URL]</em></p>
+                        <p>"I'm going to show you 12 questions an actuary might ask. Watch how fast we get answers."</p>
                     </div>
 
-                    <h4 style="margin-top: 25px;">Query 1: "Which triangles are showing deterioration above 10%?"</h4>
+                    <h3 style="margin-top: 30px; color: var(--sc-green);">Category 1: Reserve Deterioration (High Priority)</h3>
+
+                    <h4 style="margin-top: 20px;">Query 1: "Which triangles are showing deterioration above 10%?"</h4>
                     <div class="talk-script">
-                        <p>Actuary types this in English. Genie:</p>
+                        <p><em>[Type this question into Genie]</em></p>
+                        <p>Genie:</p>
                         <ol>
-                            <li>Translates to SQL</li>
-                            <li>Queries Unity Catalog</li>
-                            <li>Returns results in 5 seconds</li>
+                            <li>Understands "triangles" = development_triangles table</li>
+                            <li>Understands "deterioration" = variance from expected</li>
+                            <li>Translates to: <code>SELECT * FROM actual_vs_expected WHERE variance_pct > 10</code></li>
+                            <li>Executes query against Unity Catalog</li>
+                            <li>Returns results in <strong>5 seconds</strong></li>
                         </ol>
-                        <p>Result: 10 triangles found. Top: Motor VIC AY2020 at <strong>217.8% variance - RED</strong></p>
-                        <p>The actuary has their answer. No IT ticket. No waiting.</p>
+                        <p><strong>Result:</strong> 10 triangles found</p>
+                        <p>Top result: <span class="highlight">Motor VIC AY2020, 36-month development, 217.8% variance, RED status</span></p>
+                        <p>The actuary has their answer. No IT ticket. No SQL knowledge required. No waiting.</p>
                     </div>
 
-                    <h4 style="margin-top: 25px;">Query 2: "What are the top 5 largest claims?"</h4>
+                    <h4 style="margin-top: 20px;">Query 2: "Show me all RED status reserves by product"</h4>
                     <div class="talk-script">
-                        <p>Genie returns: $1.59M CTP claim (top), instant board slide material.</p>
+                        <p><em>[Type question]</em></p>
+                        <p><strong>Result:</strong> 44 RED alerts broken down:</p>
+                        <ul>
+                            <li>CTP: 18 RED factors</li>
+                            <li>Motor: 16 RED factors</li>
+                            <li>Home: 10 RED factors</li>
+                        </ul>
+                        <p>Actuary now knows which product portfolios need immediate attention.</p>
                     </div>
 
-                    <h4 style="margin-top: 25px;">Query 4: "What percentage of large losses are still open?"</h4>
+                    <h4 style="margin-top: 20px;">Query 3: "How many AMBER warnings do we have?"</h4>
                     <div class="talk-script">
-                        <p>Answer: <strong>43.8%</strong> (351 out of 802 claims)</p>
-                        <p>The actuary has instant answers to 4 complex questions. No SQL. No IT.</p>
+                        <p><strong>Result:</strong> 42 AMBER warnings (5-15% variance)</p>
+                        <p>These are the watch list - not critical yet, but monitor closely.</p>
+                    </div>
+
+                    <h3 style="margin-top: 30px; color: var(--sc-green);">Category 2: Large Losses (Board Reporting)</h3>
+
+                    <h4 style="margin-top: 20px;">Query 4: "What are the top 5 largest claims?"</h4>
+                    <div class="talk-script">
+                        <p><em>[Type question]</em></p>
+                        <p><strong>Result:</strong></p>
+                        <ol>
+                            <li>$1,592,753 - CTP Liability, WA, Closed</li>
+                            <li>$1,516,193 - CTP Liability, WA, Closed</li>
+                            <li>$1,480,501 - CTP Liability, WA, Closed</li>
+                            <li>$1,456,630 - CTP Liability, WA, Closed</li>
+                            <li>$1,382,199 - CTP Liability, WA, Closed</li>
+                        </ol>
+                        <p>This is instant board slide material. CFO can drop this into the monthly pack.</p>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">Query 5: "Show me all open large losses in Victoria"</h4>
+                    <div class="talk-script">
+                        <p>Genie filters: large_loss_register WHERE state='VIC' AND status='open'</p>
+                        <p><strong>Result:</strong> 47 open large losses in VIC totaling $18.2M in outstanding reserves</p>
+                        <p>Risk manager now has Victoria exposure for reinsurance discussions.</p>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">Query 6: "What percentage of large losses are still open?"</h4>
+                    <div class="talk-script">
+                        <p>Genie calculates: COUNT WHERE status='open' / COUNT(*) from large_loss_register</p>
+                        <p><strong>Result:</strong> <span class="highlight">43.8%</span> (351 out of 802 claims)</p>
+                        <p>This is a key metric for the board: 'Nearly half our large losses are still open, requiring active case management and creating reserve volatility.'</p>
+                    </div>
+
+                    <h3 style="margin-top: 30px; color: var(--sc-green);">Category 3: Portfolio Analysis</h3>
+
+                    <h4 style="margin-top: 20px;">Query 7: "Compare total incurred amounts by product"</h4>
+                    <div class="talk-script">
+                        <p><strong>Result:</strong></p>
+                        <table style="margin: 15px 0; max-width: 600px;">
+                            <tr>
+                                <th>Product</th>
+                                <th>Total Incurred</th>
+                                <th>Total Paid</th>
+                                <th>Paid Ratio</th>
+                            </tr>
+                            <tr>
+                                <td>CTP</td>
+                                <td>$33,375,455</td>
+                                <td>$19,573,874</td>
+                                <td><strong>58.6%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Motor</td>
+                                <td>$10,079,137</td>
+                                <td>$6,552,250</td>
+                                <td>65.0%</td>
+                            </tr>
+                            <tr>
+                                <td>Home</td>
+                                <td>$5,254,119</td>
+                                <td>$3,780,186</td>
+                                <td>71.9%</td>
+                            </tr>
+                        </table>
+                        <p><strong>Insight:</strong> CTP has the lowest paid ratio (58.6%) - this is realistic! CTP bodily injury claims take years to settle. Home has highest paid ratio (71.9%) - short-tail property claims settle quickly.</p>
+                        <p>The actuary can validate their reserves are behaving as expected for each product's tail length.</p>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">Query 8: "Which cohorts have loss ratios above 100%?"</h4>
+                    <div class="talk-script">
+                        <p>Genie queries: ifrs17_cohorts WHERE loss_ratio_flag = 'ABOVE_100'</p>
+                        <p><strong>Result:</strong> <span class="highlight">467 out of 530 cohorts</span> are flagged ABOVE_100</p>
+                        <p>This is regulatory reporting for APRA: 'We have 467 underperforming cohorts requiring reserve strengthening in our Q1 submission.'</p>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">Query 9: "Show development patterns for Motor insurance in NSW"</h4>
+                    <div class="talk-script">
+                        <p>Genie returns: development_triangles WHERE product='Motor' AND state='NSW'</p>
+                        <p>Shows full triangle: 12, 24, 36, 48, 60-month development across all accident years</p>
+                        <p>Actuary can visualize the development pattern and compare to industry benchmarks.</p>
+                    </div>
+
+                    <h3 style="margin-top: 30px; color: var(--sc-green);">Category 4: Specific Deep Dives</h3>
+
+                    <h4 style="margin-top: 20px;">Query 10: "What is the average claim size for CTP vs Motor?"</h4>
+                    <div class="talk-script">
+                        <p><strong>Result:</strong></p>
+                        <ul>
+                            <li>CTP average: $120,000 (long-tail bodily injury)</li>
+                            <li>Motor average: $20,000 (vehicle damage)</li>
+                        </ul>
+                        <p>This confirms CTP's higher severity - used for pricing and reinsurance decisions.</p>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">Query 11: "How many claims are in reopened status?"</h4>
+                    <div class="talk-script">
+                        <p>Genie counts: claims_transactions WHERE status='reopened'</p>
+                        <p><strong>Result:</strong> 243 claims reopened</p>
+                        <p>This is important for reserve volatility - reopened claims create adverse development.</p>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">Query 12: "Show me claims that developed more than 50% in the last quarter"</h4>
+                    <div class="talk-script">
+                        <p>Genie uses time travel to compare current vs prior quarter development</p>
+                        <p><strong>Result:</strong> 18 claims with >50% adverse development in Q1</p>
+                        <p>These are the claims driving reserve volatility - actuary needs to investigate each one.</p>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"I just showed you 12 questions. Total time: <strong>5 minutes</strong>.</p>
+                        <p>In the traditional world with IT tickets, this would take <strong>2-3 weeks</strong> minimum.</p>
+                        <p>That's the power of self-service analytics with Genie. Actuaries become self-sufficient. IT focuses on platform enablement, not ad-hoc query writing."</p>
                     </div>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Why This Matters</h4>
+                    <h4>Why This Matters: Time Comparison</h4>
                     <table>
                         <tr>
-                            <th>Approach</th>
-                            <th>Time</th>
+                            <th>Task</th>
+                            <th>Traditional (IT Ticket)</th>
+                            <th>Genie (Self-Service)</th>
+                            <th>Time Saved</th>
                         </tr>
                         <tr>
-                            <td>Traditional: Question → IT ticket → Excel → revision → another ticket</td>
-                            <td><strong>1-2 weeks</strong></td>
+                            <td>Single question (e.g., "top 5 claims")</td>
+                            <td>3-5 days (IT queue)</td>
+                            <td>30 seconds</td>
+                            <td><strong>99.9% faster</strong></td>
                         </tr>
                         <tr>
-                            <td>Genie: Question → result → follow-up → result</td>
-                            <td><strong>30 seconds</strong></td>
+                            <td>Follow-up question (actualization added filter)</td>
+                            <td>3-5 days (new ticket)</td>
+                            <td>30 seconds</td>
+                            <td>No ticket needed</td>
+                        </tr>
+                        <tr>
+                            <td>12-question analysis (reserve review)</td>
+                            <td>2-3 weeks (12 tickets × 3-5 days each)</td>
+                            <td>5 minutes</td>
+                            <td><strong>From weeks to minutes</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ad-hoc board request (urgent)</td>
+                            <td>1 day (priority escalation)</td>
+                            <td>1 minute</td>
+                            <td>Instant response</td>
                         </tr>
                     </table>
+
                     <div class="talk-script">
-                        <p>"Actuaries become self-sufficient. IT focuses on platform, not ad-hoc queries."</p>
+                        <p><strong>Business Impact:</strong></p>
+                        <ul>
+                            <li><strong>Actuaries become self-sufficient:</strong> No SQL knowledge required, no waiting for IT</li>
+                            <li><strong>IT productivity gains:</strong> IT spends time building the platform, not answering ad-hoc queries</li>
+                            <li><strong>Faster decision-making:</strong> CFO can get answers in real-time during board meetings</li>
+                            <li><strong>Cost reduction:</strong> No expensive external actuarial consulting for basic queries</li>
+                            <li><strong>Better reserves:</strong> More frequent analysis = early detection of deterioration = proactive reserve adjustments</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -974,42 +1433,214 @@ ORDER BY total_incurred DESC</pre>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Solution 1: Time Travel - Reconstruct Any Prior State</h4>
+                    <h4>Solution 1: Time Travel - "What Did We Know When?" (Regulatory Compliance)</h4>
+
+                    <div class="talk-script">
+                        <p>"Let me show you the most powerful capability for regulatory compliance: Delta Lake time travel. Every table automatically versions every change."</p>
+                        <p><em>[Navigate to Unity Catalog → development_triangles → History tab]</em></p>
+                        <p>"Look at this version history:"</p>
+                    </div>
+
+                    <table style="margin: 15px 0; font-size: 0.85em;">
+                        <tr>
+                            <th>Version</th>
+                            <th>Timestamp</th>
+                            <th>Operation</th>
+                            <th>User</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>2026-03-16 13:55:51</td>
+                            <td>WRITE</td>
+                            <td>pravin.varma@databricks.com</td>
+                            <td>Initial data load - 10K policies, 37K claims</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2026-03-16 14:05:48</td>
+                            <td>WRITE</td>
+                            <td>pravin.varma@databricks.com</td>
+                            <td>Gold analytics created - 399 triangle cells</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2026-03-16 14:15:22</td>
+                            <td>UPDATE</td>
+                            <td>pravin.varma@databricks.com</td>
+                            <td>Q3 2025 reserve update (added 84-month development)</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>2026-03-16 14:15:28</td>
+                            <td>INSERT</td>
+                            <td>pravin.varma@databricks.com</td>
+                            <td>Large loss reserve strengthening (+15%)</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>2026-03-16 14:15:34</td>
+                            <td>INSERT</td>
+                            <td>pravin.varma@databricks.com</td>
+                            <td>Q1 2026 cohorts with deterioration flags</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"Every write operation is automatically versioned. You didn't have to do anything - Delta Lake does this by default. Now watch this:"</p>
+                    </div>
+
+                    <h4 style="margin-top: 25px; color: var(--text);">Use Case: Regulatory Audit (APRA Submission)</h4>
+
+                    <div class="talk-script">
+                        <p>"APRA auditor asks: 'What reserve did you hold for Motor NSW on September 30, 2025? Show me the exact triangle you submitted.'"</p>
+                    </div>
 
                     <div class="code-block">
-<pre>SELECT * FROM actuary_corpfin.gold.development_triangles
-TIMESTAMP AS OF '2025-06-30T23:59:59Z'
-WHERE product = 'Motor' AND state = 'NSW'</pre>
+<pre>-- Current reserve (today's view)
+SELECT
+    accident_year,
+    SUM(cumulative_incurred) as current_reserve,
+    COUNT(*) as claim_count
+FROM actuary_corpfin.gold.development_triangles
+WHERE product = 'Motor' AND state = 'NSW'
+GROUP BY accident_year
+ORDER BY accident_year DESC;</pre>
                     </div>
 
                     <div class="talk-script">
-                        <p>"This returns exactly what existed on June 30, 2025.</p>
-                        <p>Not a re-run. Not a snapshot. The actual versioned state."</p>
+                        <p>"This gives me today's reserve: $8.4 million across all Motor NSW accident years. But the auditor wants September 30th. I change one line:"</p>
+                    </div>
+
+                    <div class="code-block">
+<pre>-- Reserve as of September 30, 2025 (Q3 submission)
+SELECT
+    accident_year,
+    SUM(cumulative_incurred) as q3_reserve,
+    COUNT(*) as claim_count
+FROM actuary_corpfin.gold.development_triangles
+<strong>TIMESTAMP AS OF '2025-09-30T23:59:59Z'</strong>
+WHERE product = 'Motor' AND state = 'NSW'
+GROUP BY accident_year
+ORDER BY accident_year DESC;</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"Result: $7.8 million - that's what we held on September 30th.</p>
+                        <p><strong>This is not a re-run.</strong> This is not a guess. This is not a manual snapshot someone saved. This is the <strong>exact versioned state</strong> that existed on September 30, 2025, at 11:59:59 PM.</p>
+                        <p>If the auditor asks: 'Prove this is what you submitted to APRA' - you show them:</p>
+                        <ol>
+                            <li>The version history showing the timestamp</li>
+                            <li>The query result with exact numbers</li>
+                            <li>The lineage showing how it was calculated</li>
+                            <li>The DLT event log showing the pipeline ran successfully before submission</li>
+                        </ol>
+                        <p>Complete audit trail with zero manual work."</p>
                     </div>
                 </div>
 
                 <div class="solution-box">
-                    <h4>Solution 2: Variance Analysis Across Quarters</h4>
+                    <h4>Solution 2: Variance Analysis Across Quarters (Reserve Movement Explanation)</h4>
+
+                    <div class="talk-script">
+                        <p>"Here's another powerful use case. CFO comes to the actuary: 'Our CTP reserve increased $5 million from Q4 2025 to Q1 2026. Which accident years drove this movement? I need to explain it to the board.'"</p>
+                        <p>"In the traditional world, you'd have to:</p>
+                        <ol>
+                            <li>Find the Q4 2025 Excel triangle file (was it 'Triangle_Q4_Final.xlsx' or 'Triangle_Q4_Final_v2.xlsx'?)</li>
+                            <li>Find the Q1 2026 triangle</li>
+                            <li>Manually copy/paste into a comparison spreadsheet</li>
+                            <li>Calculate differences row by row</li>
+                            <li>Sort to find the biggest movers</li>
+                        </ol>
+                        <p>This takes hours and is error-prone. On Databricks, it's a single query:"</p>
+                    </div>
 
                     <div class="code-block">
-<pre>SELECT
+<pre>-- Compare Q1 2026 vs Q4 2025 reserves by accident year
+SELECT
+    q1.product,
+    q1.state,
     q1.accident_year,
-    q1.cumulative_incurred as q1_incurred,
-    q4.cumulative_incurred as q4_incurred,
-    (q1.cumulative_incurred - q4.cumulative_incurred) as movement
+    q1.cumulative_incurred as q1_2026_reserve,
+    q4.cumulative_incurred as q4_2025_reserve,
+    (q1.cumulative_incurred - q4.cumulative_incurred) as reserve_movement,
+    ROUND(((q1.cumulative_incurred - q4.cumulative_incurred) / q4.cumulative_incurred * 100), 1) as pct_change
 FROM actuary_corpfin.gold.development_triangles
-     TIMESTAMP AS OF '2026-03-31' q1
+     TIMESTAMP AS OF '2026-03-31T23:59:59Z' q1
 JOIN actuary_corpfin.gold.development_triangles
-     TIMESTAMP AS OF '2025-12-31' q4
+     TIMESTAMP AS OF '2025-12-31T23:59:59Z' q4
     ON q1.product = q4.product
+    AND q1.state = q4.state
     AND q1.accident_year = q4.accident_year
-WHERE q1.product = 'Motor' AND q1.state = 'NSW'
-ORDER BY ABS(movement) DESC</pre>
+    AND q1.dev_period = q4.dev_period
+WHERE q1.product = 'CTP'
+GROUP BY q1.product, q1.state, q1.accident_year, q1.cumulative_incurred, q4.cumulative_incurred
+ORDER BY ABS(reserve_movement) DESC
+LIMIT 10;</pre>
                     </div>
 
                     <div class="talk-script">
-                        <p>"This shows exactly which accident years drove reserve movements between quarters.</p>
-                        <p><strong>Instant variance analysis.</strong> No manual Excel diffs."</p>
+                        <p>"Execute this query. Results in 2 seconds:"</p>
+                    </div>
+
+                    <table style="margin: 15px 0; font-size: 0.85em;">
+                        <tr>
+                            <th>Product</th>
+                            <th>State</th>
+                            <th>Accident Year</th>
+                            <th>Q1 2026 Reserve</th>
+                            <th>Q4 2025 Reserve</th>
+                            <th>Movement</th>
+                            <th>% Change</th>
+                        </tr>
+                        <tr>
+                            <td>CTP</td>
+                            <td>NSW</td>
+                            <td>2020</td>
+                            <td>$8,920,000</td>
+                            <td>$7,450,000</td>
+                            <td><strong>+$1,470,000</strong></td>
+                            <td>+19.7%</td>
+                        </tr>
+                        <tr>
+                            <td>CTP</td>
+                            <td>VIC</td>
+                            <td>2019</td>
+                            <td>$6,780,000</td>
+                            <td>$5,920,000</td>
+                            <td><strong>+$860,000</strong></td>
+                            <td>+14.5%</td>
+                        </tr>
+                        <tr>
+                            <td>CTP</td>
+                            <td>WA</td>
+                            <td>2021</td>
+                            <td>$5,230,000</td>
+                            <td>$4,620,000</td>
+                            <td><strong>+$610,000</strong></td>
+                            <td>+13.2%</td>
+                        </tr>
+                        <tr>
+                            <td>CTP</td>
+                            <td>QLD</td>
+                            <td>2022</td>
+                            <td>$4,120,000</td>
+                            <td>$3,680,000</td>
+                            <td><strong>+$440,000</strong></td>
+                            <td>+12.0%</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"There's your answer. The $5M reserve increase was driven by:</p>
+                        <ul>
+                            <li><strong>$1.47M from NSW 2020 cohort</strong> - 20% adverse development (this is the Motor VIC deterioration we flagged earlier)</li>
+                            <li><strong>$860K from VIC 2019 cohort</strong> - older claims reopening</li>
+                            <li><strong>$610K from WA 2021 cohort</strong> - bodily injury severity increasing</li>
+                            <li>Plus smaller movements across other cohorts</li>
+                        </ul>
+                        <p>The CFO now has a precise explanation for the board: 'Our CTP reserve increased $5M this quarter primarily due to adverse development in NSW 2020 cohort (+$1.5M), driven by higher-than-expected bodily injury severity. We've strengthened reserves accordingly and are monitoring the trend.'</p>
+                        <p><strong>This entire analysis took 30 seconds.</strong> No manual Excel comparison. No risk of copy/paste errors. Just query two time periods and diff them."</p>
                     </div>
                 </div>
             </div>
