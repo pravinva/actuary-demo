@@ -406,6 +406,18 @@
                         <td>3 min</td>
                     </tr>
                 </table>
+
+                <div class="tips" style="margin-top: 25px;">
+                    <h4>If You're Not an Actuary: 60-Second Cheat Sheet</h4>
+                    <ul>
+                        <li><strong>Scenario 1 - Regulatory Reporting:</strong> "What must we submit to APRA/IFRS 17, and can we prove it?"</li>
+                        <li><strong>Scenario 2 - Executive Reporting:</strong> "Where is financial risk building, and what should the board know now?"</li>
+                        <li><strong>Scenario 3 - Operational Monitoring:</strong> "What changed this week that may require reserve action before month-end?"</li>
+                    </ul>
+                    <p><strong>RAG in plain English:</strong> <strong>GREEN</strong> = on plan, <strong>AMBER</strong> = warning, <strong>RED</strong> = materially worse than expected and needs immediate review.</p>
+                    <p><strong>How to explain Genie:</strong> "Business users ask questions in plain English; Genie translates to SQL on governed Unity Catalog tables."</p>
+                    <p><strong>How to explain the dashboard:</strong> "This is the management layer - KPI summary at top, risk drivers in the middle, and drill-down evidence at the bottom."</p>
+                </div>
             </div>
 
             <!-- PROBLEM 1 -->
@@ -882,6 +894,7 @@ LIMIT 10</pre>
 
                     <div class="talk-script">
                         <p>"This table compares <strong>actual development factors</strong> to <strong>expected development factors</strong> from historical patterns. We're monitoring <span class="highlight">266 development factors</span> across all product/state/year/period combinations."</p>
+                        <p><strong>Non-actuary translation:</strong> we compare "what we expected claims to cost by now" versus "what they actually cost by now." If actual is much worse than expected, it turns RED.</p>
                     </div>
 
                     <h4 style="margin-top: 25px; color: var(--text);">Current RAG Status Breakdown</h4>
@@ -946,6 +959,7 @@ LIMIT 10</pre>
                             <li><strong>Variance:</strong> 217.8% - this is a massive adverse development</li>
                         </ul>
                         <p>In plain English: We reserved $1 million for this cohort based on historical patterns, but it's actually going to cost $3.2 million. We're under-reserved by $2.2 million just on this one accident year.</p>
+                        <p><strong>Important phrasing:</strong> RED is not "business failure." RED means "this segment is developing worse than baseline assumptions and needs action."</p>
                         <p><strong>This is why it's flagged RED. The actuary needs to investigate today:</strong></p>
                         <ol>
                             <li>Is this a genuine trend? (E.g., increased injury severity in Victoria?)</li>
@@ -1433,6 +1447,7 @@ RUN;</pre>
                     <div class="talk-script">
                         <p>"Let me show you how we solve the self-service problem. Remember the traditional workflow: actuary emails IT, waits 3-5 days for a query, realizes it's not quite right, sends another request, waits another 3 days...</p>
                         <p>On Databricks, we use Genie - natural language analytics. Actuaries ask questions in plain English, get SQL-powered answers in seconds."</p>
+                        <p><strong>One-line explanation for non-technical audiences:</strong> "Genie is a trusted analytics assistant over governed data, not a chatbot making up numbers."</p>
                         <p><em>[Navigate to Genie Space URL]</em></p>
                         <p>"I'm going to show you 12 questions an actuary might ask. Watch how fast we get answers."</p>
                     </div>
@@ -2033,7 +2048,15 @@ LIMIT 10;</pre>
                 <div class="tips">
                     <h4>Interactive Dashboard</h4>
                     <p><strong>URL:</strong> <a href="https://pravinva.github.io/actuary-demo/" target="_blank">https://pravinva.github.io/actuary-demo/</a></p>
-                    <p>Walk through the Genie queries, DQ patterns, time travel examples. Share with your team.</p>
+                    <p><strong>How to walk it (non-actuary friendly):</strong></p>
+                    <ul>
+                        <li><strong>Top row (KPI counters):</strong> "How big is the reserve and how much is paid?"</li>
+                        <li><strong>Middle charts:</strong> "Which products/states are driving risk movement?"</li>
+                        <li><strong>Donuts:</strong> "What share is open vs closed, and where is the risk concentrated?"</li>
+                        <li><strong>Time Travel page:</strong> "How did today change versus prior reporting snapshots?"</li>
+                        <li><strong>Bottom tables:</strong> "Show the exact records behind the headline metrics."</li>
+                    </ul>
+                    <p>Walk through Genie queries, DQ patterns, and time travel evidence, then share with your team.</p>
                 </div>
 
                 <h3 style="margin-top: 30px;">Transition to Q&A</h3>
