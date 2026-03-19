@@ -455,6 +455,46 @@
                     <p><strong>How to explain Genie:</strong> "Business users ask questions in plain English; Genie translates to SQL on governed Unity Catalog tables."</p>
                     <p><strong>How to explain the dashboard:</strong> "This is the management layer - KPI summary at top, risk drivers in the middle, and drill-down evidence at the bottom."</p>
                 </div>
+
+                <div class="solution-box">
+                    <h4>Exec Translation: What These Databricks Terms Mean</h4>
+                    <table style="margin-top: 10px;">
+                        <tr>
+                            <th>Term</th>
+                            <th>Exec-Level Description</th>
+                            <th>Primary Users</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Unity Catalog</strong></td>
+                            <td>The governance control plane: one place to control access, track lineage, and prove where reported numbers came from.</td>
+                            <td>Risk/compliance leaders, auditors, data engineers, analytics owners</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DLT (Delta Live Tables)</strong></td>
+                            <td>The production pipeline layer: continuously transforms source data into trusted reporting tables with built-in quality checks.</td>
+                            <td>Data engineers (build), actuaries/analysts (consume trusted outputs), control owners (review quality)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Delta Lake</strong></td>
+                            <td>The reliable table format: ACID consistency and version history so you can reproduce what was known at a specific reporting date.</td>
+                            <td>Actuaries, finance analysts, auditors, data engineers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lakeview Dashboard</strong></td>
+                            <td>The executive decision layer: curated KPI and risk visuals for board packs and management review.</td>
+                            <td>CFO/board stakeholders, finance leaders, actuarial managers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Genie</strong></td>
+                            <td>The self-service question layer: business users ask in plain English and get governed, SQL-backed answers quickly.</td>
+                            <td>Actuaries, finance business partners, executives needing ad-hoc answers</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"Simple framing: Unity Catalog governs, DLT prepares, Delta preserves, Lakeview communicates, Genie answers."</p>
+                    </div>
+                </div>
             </div>
 
             <!-- PROBLEM 1 -->
