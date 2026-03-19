@@ -12,7 +12,7 @@ This repository contains all code artifacts for the Finance Actuarial demo acros
 
 1. **Warehouse ID Mismatch**: Specified warehouse `4b9b953939869799` not found
 2. **Unity Catalog Context**: SQL statements succeeding but tables not materializing in catalog
-3. **DLT Pipeline**: Cross-schema table references failing during initialization
+3. **SDP Pipeline**: Cross-schema table references failing during initialization
 4. **Statement Execution API**: Current catalog/schema context not being maintained between statements
 
 ## Workstream Artifacts Created
@@ -30,9 +30,9 @@ This repository contains all code artifacts for the Finance Actuarial demo acros
 - `reinsurance_treaties_raw` - 12 treaty configurations (QS + XL)
 - `finance_rates_raw` - 99 monthly rate observations
 
-### WS-2: DLT Bronze→Silver Pipeline
+### WS-2: SDP Bronze→Silver Pipeline
 **Files:**
-- `actuarial_dlt_pipeline.py` - Original DLT pipeline with cross-schema joins
+- `actuarial_dlt_pipeline.py` - Original SDP pipeline with cross-schema joins
 - `actuarial_dlt_pipeline_simple.py` - Simplified version with source views
 - `ws2_deploy_dlt_pipeline.py` - Deployment script with SDK
 
@@ -46,7 +46,7 @@ This repository contains all code artifacts for the Finance Actuarial demo acros
 - `reinsurance_treaties`: valid_dates, valid_cession
 - `claims_dq_quarantine`: Quarantine table for future lodgement dates
 
-**Failure Reason:** `TABLE_OR_VIEW_NOT_FOUND` - Bronze tables not accessible in DLT context
+**Failure Reason:** `TABLE_OR_VIEW_NOT_FOUND` - Bronze tables not accessible in SDP context
 
 ### WS-3: Gold Analytics (Not Completed)
 **Planned Tables:**
@@ -70,7 +70,7 @@ This repository contains all code artifacts for the Finance Actuarial demo acros
 - `large_loss_register.sql` - Top losses with drill-down
 - `ifrs17_cohort_summary.sql` - Loss ratio monitoring
 
-**Lakeview Dashboard:** "Finance Actuarial — Portfolio Monitoring" (4 panels)
+**AI/BI Dashboard:** "Finance Actuarial — Portfolio Monitoring" (4 panels)
 
 ### WS-6: MLflow Anomaly Detection (Not Completed)
 **Planned Components:**
@@ -93,7 +93,7 @@ python ws1_create_bronze_direct.py
 databricks sql execute -w <WAREHOUSE_ID> "SHOW TABLES IN actuary_corpfin.bronze"
 ```
 
-### DLT Pipeline (5 mins)
+### SDP Pipeline (5 mins)
 ```bash
 # 1. Upload pipeline
 databricks workspace import /Users/pravin.varma@databricks.com/actuary_demo/actuarial_dlt_pipeline.py \
@@ -102,7 +102,7 @@ databricks workspace import /Users/pravin.varma@databricks.com/actuary_demo/actu
 # 2. Trigger update
 databricks pipelines start-update 504aee46-172c-4512-8310-13f90f7e4e03
 
-# 3. Demo: Show DLT UI with expectations and event log
+# 3. Demo: Show SDP UI with expectations and event log
 ```
 
 ### Gold Layer & Beyond (Remaining workstreams)
@@ -124,9 +124,9 @@ actuary-demo/
 │   └── workstreams.md              # Original requirements
 ├── ws1_synthetic_data_generator.py # Original data generator
 ├── ws1_create_bronze_direct.py     # Simplified bronze creator
-├── ws2_deploy_dlt_pipeline.py      # DLT deployment script
-├── actuarial_dlt_pipeline.py       # DLT pipeline (original)
-├── actuarial_dlt_pipeline_simple.py # DLT pipeline (simplified)
+├── ws2_deploy_dlt_pipeline.py      # SDP deployment script
+├── actuarial_dlt_pipeline.py       # SDP pipeline (original)
+├── actuarial_dlt_pipeline_simple.py # SDP pipeline (simplified)
 ├── build_all_workstreams.py        # Attempted comprehensive build
 └── README.md                       # This file
 ```
@@ -136,13 +136,13 @@ actuary-demo/
 1. **Resolve Warehouse Access**: Verify correct warehouse ID and permissions
 2. **Validate Catalog Context**: Ensure `USE CATALOG/USE SCHEMA` persists across statements
 3. **Execute WS-1**: Run `ws1_create_bronze_direct.py` and verify tables exist
-4. **Fix DLT Pipeline**: Update source references once bronze tables are confirmed
+4. **Fix SDP Pipeline**: Update source references once bronze tables are confirmed
 5. **Build WS-3 through WS-6**: SQL scripts for gold layer, metadata, dashboard, MLflow
 
 ## Technical Observations
 
 - **SDK Statement Execution**: `.result` access pattern inconsistent
-- **DLT Source Tables**: `spark.table()` and `dlt.read()` both failed for cross-schema UC access
+- **SDP Source Tables**: `spark.table()` and `dlt.read()` both failed for cross-schema UC access
 - **CREATE OR REPLACE**: Not supported, must use DROP IF EXISTS pattern
 - **Warehouse Availability**: List shows 1000+ warehouses, but specified ID not found
 

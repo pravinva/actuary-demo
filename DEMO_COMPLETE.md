@@ -17,7 +17,7 @@ Complete end-to-end Finance Actuarial demo built on Databricks showcasing:
 - **Development triangles** with reserve deterioration alerts
 - **AI/BI dashboards** with 4 analytical panels
 - **Genie space** with 20+ natural language questions
-- **DLT pipeline** with serverless compute and embedded DQ
+- **SDP pipeline** with serverless compute and embedded DQ
 
 ---
 
@@ -51,7 +51,7 @@ Complete end-to-end Finance Actuarial demo built on Databricks showcasing:
 
 ## 🚀 Demo Components
 
-### 1. AI/BI Lakeview Dashboard ✅
+### 1. AI/BI Dashboard ✅
 
 **Location:** SQL Dashboards → "Finance Actuarial - Portfolio Monitoring"
 
@@ -92,7 +92,7 @@ Complete end-to-end Finance Actuarial demo built on Databricks showcasing:
 
 **Genie URL:** https://e2-demo-field-eng.cloud.databricks.com/genie
 
-### 3. DLT Pipeline (Serverless) ✅
+### 3. SDP Pipeline (Serverless) ✅
 
 **Pipeline Name:** `actuarial_finance_serverless`
 **Pipeline ID:** `2a52433e-beb8-446d-9091-e40854f9bd88`
@@ -146,9 +146,9 @@ SELECT * FROM actuary_corpfin.bronze.claims_transactions_raw LIMIT 100;
 - 37K claims with realistic development patterns
 - Synthetic but actuarially sound (long-tail CTP, quick-settling motor)
 
-### Act 3: DLT Pipeline with DQ (7 min)
+### Act 3: SDP Pipeline with DQ (7 min)
 
-**Show DLT UI:**
+**Show SDP UI:**
 - Navigate to Pipeline URL
 - Show serverless auto-scaling
 - Highlight data quality expectations
@@ -163,7 +163,7 @@ SELECT * FROM actuary_corpfin.bronze.claims_transactions_raw LIMIT 100;
 
 ### Act 4: Analytics Dashboard (8 min)
 
-**Open Lakeview Dashboard:**
+**Open AI/BI Dashboard:**
 
 **Panel 1 - Development Triangles:**
 - "Here's our reserve development by accident year"
@@ -292,7 +292,7 @@ SELECT * FROM actuary_corpfin.gold.development_triangles;
 - `complete_build_all_workstreams.py` - Initial schema and sample data
 - `full_data_loader.py` - Comprehensive 10K policy + 37K claims load
 
-### DLT Pipeline
+### SDP Pipeline
 - `actuarial_dlt_serverless.py` - Pipeline definition (bronze → silver → gold)
 - `deploy_dlt_serverless.py` - Deployment script
 
@@ -314,7 +314,7 @@ SELECT * FROM actuary_corpfin.gold.development_triangles;
 ### Legacy (Historical Record)
 - `ws1_synthetic_data_generator.py` - Original generator
 - `ws1_create_bronze_direct.py` - Direct SQL approach
-- `ws2_deploy_dlt_pipeline.py` - Initial DLT attempt
+- `ws2_deploy_dlt_pipeline.py` - Initial SDP attempt
 - `actuarial_dlt_pipeline.py` - First pipeline version
 
 ---
@@ -329,7 +329,7 @@ SELECT * FROM actuary_corpfin.gold.development_triangles;
 - [x] IFRS 17 cohorts created (522 cohorts)
 - [x] Dashboard SQL queries created (4 files)
 - [x] Genie documentation complete (2 files, 30+ questions)
-- [x] DLT pipeline deployed (serverless, ID: 2a52433e-beb8-446d-9091-e40854f9bd88)
+- [x] SDP pipeline deployed (serverless, ID: 2a52433e-beb8-446d-9091-e40854f9bd88)
 - [x] Unity Catalog metadata enriched (comments, tags)
 - [x] Time travel validated (Delta versions preserved)
 - [x] End-to-end demo flow documented
@@ -347,7 +347,7 @@ databricks sql execute -w 4b9b953939869799 \
    SELECT 'gold.development_triangles', COUNT(*) FROM actuary_corpfin.gold.development_triangles"
 ```
 
-### Run DLT Pipeline (Optional)
+### Run SDP Pipeline (Optional)
 ```bash
 # Pipeline already deployed - optionally trigger an update run
 databricks pipelines start-update 2a52433e-beb8-446d-9091-e40854f9bd88
@@ -387,7 +387,7 @@ databricks pipelines start-update 2a52433e-beb8-446d-9091-e40854f9bd88
 **For C-Level:**
 - Focus on business outcomes (faster insights, lower TCO)
 - Show dashboards and Genie only
-- Skip technical DLT details
+- Skip technical SDP details
 
 **For Actuaries:**
 - Emphasize triangle accuracy and development patterns
@@ -395,7 +395,7 @@ databricks pipelines start-update 2a52433e-beb8-446d-9091-e40854f9bd88
 - Demonstrate time travel for quarterly comparisons
 
 **For IT/Data Engineering:**
-- Deep dive on DLT pipeline architecture
+- Deep dive on SDP pipeline architecture
 - Show serverless auto-scaling
 - Highlight Unity Catalog governance
 
@@ -410,13 +410,13 @@ databricks pipelines start-update 2a52433e-beb8-446d-9091-e40854f9bd88
 A: Seconds. Traditional SAS jobs: hours to days.
 
 **Q: Can we integrate our existing policy admin system?**
-A: Yes, DLT supports any source (JDBC, files, streaming, APIs).
+A: Yes, SDP supports any source (JDBC, files, streaming, APIs).
 
 **Q: What about data governance?**
 A: Unity Catalog provides row/column-level security, audit logs, lineage.
 
 **Q: Is this production-ready?**
-A: Yes. Serverless DLT scales to petabytes, used by Fortune 500 insurers.
+A: Yes. Serverless SDP scales to petabytes, used by Fortune 500 insurers.
 
 **Q: Can actuaries really use Genie without SQL?**
 A: Yes - demo it live. "Show me NSW motor deterioration" → instant results.
@@ -430,4 +430,4 @@ A: Yes - demo it live. "Show me NSW motor deterioration" → instant results.
 
 ---
 
-*Built with Databricks Unity Catalog, Delta Lake, DLT, and Genie*
+*Built with Databricks Unity Catalog, Delta Lake, Spark Declarative Pipelines, and Genie*

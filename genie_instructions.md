@@ -87,7 +87,7 @@ ORDER BY SUM(cumulative_incurred) DESC
 
 ## Data Refresh
 
-Data is refreshed via DLT pipeline. Use time travel for historical comparisons:
+Data is refreshed via SDP pipeline. Use time travel for historical comparisons:
 
 ```sql
 SELECT * FROM actuary_corpfin.gold.development_triangles

@@ -25,9 +25,9 @@ This demo addresses **ALL 6 original workstreams** from your requirements, with 
 
 ---
 
-### ✅ **Workstream 2: DLT Bronze→Silver Pipeline with DQ** - COMPLETE
+### ✅ **Workstream 2: SDP Bronze→Silver Pipeline with DQ** - COMPLETE
 **What we're showing:**
-- Delta Live Tables (DLT) serverless pipeline
+- Spark Declarative Pipelines (SDP) serverless pipeline
 - 6 embedded data quality expectations:
   1. valid_dates (Expiry > Inception)
   2. valid_state (State in approved list)
@@ -36,7 +36,7 @@ This demo addresses **ALL 6 original workstreams** from your requirements, with 
   5. valid_lodgement (Lodgement ≥ Accident)
   6. valid_status (Status in allowed values)
 - **Quarantine pattern**: Bad records preserved (not dropped) for investigation
-- Complete audit trail in DLT event log
+- Complete audit trail in SDP event log
 
 **Customer value:**
 - DQ as CODE (version controlled, not external scripts)
@@ -102,7 +102,7 @@ This demo addresses **ALL 6 original workstreams** from your requirements, with 
 ### ✅ **Workstream 5: SQL Dashboard Layer + Genie** - COMPLETE
 **What we're showing:**
 
-**A. Four Dashboard SQL Queries (ready for Lakeview):**
+**A. Four Dashboard SQL Queries (ready for AI/BI dashboards):**
 1. Development Triangles visualization
 2. Reserve Deterioration Monitor (RAG status)
 3. Large Loss Register (>$250K board reporting)
@@ -176,9 +176,9 @@ This demo addresses **ALL 6 original workstreams** from your requirements, with 
 - Realistic actuarial patterns (CTP long-tail, motor quick-settling)
 - 2% DQ errors intentionally injected
 
-### **Act 3: DLT Pipeline with Embedded DQ (7 min)**
+### **Act 3: SDP Pipeline with Embedded DQ (7 min)**
 **What we'll demonstrate:**
-- DLT serverless pipeline UI
+- SDP serverless pipeline UI
 - 6 DQ expectations as code
 - Quarantine table for failed records
 - Event log for complete audit trail
@@ -322,7 +322,7 @@ This demo addresses **ALL 6 original workstreams** from your requirements, with 
 ## ✅ Confirmation: Workstreams Covered
 
 - [x] **WS-1**: Synthetic Data Fabricator (10K policies, 37K claims, realistic patterns)
-- [x] **WS-2**: DLT Pipeline with DQ (6 expectations, quarantine, serverless)
+- [x] **WS-2**: SDP Pipeline with DQ (6 expectations, quarantine, serverless)
 - [x] **WS-3**: Gold Analytics (triangles, A vs E, large loss, IFRS17, anomalies)
 - [x] **WS-4**: Unity Catalog Metadata (comments, lineage, tags, governance)
 - [x] **WS-5**: Dashboards + Genie (4 SQL queries, 20+ NL questions with live results)

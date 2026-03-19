@@ -442,7 +442,7 @@
                     <div class="feature-card">
                         <h4> Embedded Data Quality</h4>
                         <ul>
-                            <li>6 DQ expectations in DLT pipeline</li>
+                            <li>6 DQ expectations in SDP pipeline</li>
                             <li>Quarantine pattern preserves data for investigation</li>
                             <li>Detailed audit trail in event log</li>
                             <li>DQ as code (version controlled)</li>
@@ -689,9 +689,9 @@
                 <h2> Data Quality Monitoring</h2>
 
                 <div class="highlight-box">
-                    <h3>Embedded DQ in DLT Pipeline</h3>
+                    <h3>Embedded DQ in SDP Pipeline</h3>
                     <p style="font-size: 1.1em; line-height: 1.8;">
-                        Data quality expectations are <strong>CODE</strong> in the DLT pipeline as version-controlled Python.
+                        Data quality expectations are <strong>CODE</strong> in the SDP pipeline as version-controlled Python.
                         Records failing expectations are <strong>QUARANTINED</strong> for investigation, giving actuaries
                         detailed visibility into data issues.
                     </p>
@@ -744,7 +744,7 @@
                 </table>
 
                 <div style="margin-top: 40px; padding: 30px; background: var(--db-oat); border-radius: 8px; border-left: 4px solid var(--sc-green-mid);">
-                    <h4 style="color: var(--sc-green); margin-bottom: 20px; font-weight: 700;">Databricks DLT Data Quality</h4>
+                    <h4 style="color: var(--sc-green); margin-bottom: 20px; font-weight: 700;">Databricks SDP Data Quality</h4>
                     <ul style="font-size: 1.05em; line-height: 1.8;">
                         <li>Records QUARANTINED for investigation</li>
                         <li>Detailed visibility in DQ quarantine table</li>
@@ -909,7 +909,7 @@ TIMESTAMP AS OF
                     <h3>Medallion Architecture: Bronze → Silver → Gold</h3>
                     <p style="font-size: 1.1em; line-height: 1.8;">
                         Raw data lands in Bronze, is cleaned and validated in Silver (with DQ expectations),
-                        then enriched into business-ready Gold analytics tables. All powered by Delta Live Tables
+                        then enriched into business-ready Gold analytics tables. All powered by Spark Declarative Pipelines
                         with serverless compute.
                     </p>
                 </div>
@@ -937,7 +937,7 @@ TIMESTAMP AS OF
                     </div>
 
                     <div class="feature-card">
-                        <h4> Delta Live Tables</h4>
+                        <h4> Spark Declarative Pipelines</h4>
                         <ul>
                             <li>Declarative pipeline definitions</li>
                             <li>Embedded DQ expectations</li>
@@ -969,11 +969,11 @@ TIMESTAMP AS OF
                     </tr>
                     <tr>
                         <td><strong>AI/BI Dashboards</strong></td>
-                        <td>Live Lakeview dashboards with interactive visualizations</td>
+                        <td>Live AI/BI dashboards with interactive visualizations</td>
                     </tr>
                     <tr>
                         <td><strong>Data Quality</strong></td>
-                        <td>DQ expectations embedded as code in DLT pipeline</td>
+                        <td>DQ expectations embedded as code in SDP pipeline</td>
                     </tr>
                     <tr>
                         <td><strong>Time Travel</strong></td>
@@ -989,7 +989,7 @@ TIMESTAMP AS OF
                     </tr>
                     <tr>
                         <td><strong>Compute</strong></td>
-                        <td>Serverless DLT with automatic scaling and optimization</td>
+                        <td>Serverless SDP with automatic scaling and optimization</td>
                     </tr>
                 </table>
 
@@ -1002,7 +1002,7 @@ Bronze Layer (Raw Data)
 ├── reinsurance_treaties    12 rows
 └── finance_rates           99 rows
        ↓
-       ↓ DLT Pipeline (6 DQ Expectations)
+       ↓ SDP Pipeline (6 DQ Expectations)
        ↓
 Silver Layer (Cleaned)
 ├── policy_clean            (validated)
@@ -1036,7 +1036,7 @@ Gold Layer (Business-Ready)
         <footer>
             <p><strong>Finance Actuarial Demo</strong> | Databricks Lakehouse Platform</p>
             <p style="margin-top: 10px; opacity: 0.8;">
-                Built with Unity Catalog, Delta Lake, Delta Live Tables, and Genie AI/BI
+                Built with Unity Catalog, Delta Lake, Spark Declarative Pipelines, and Genie AI/BI
             </p>
             <p style="margin-top: 15px; font-size: 0.9em;">
                 Workspace: e2-demo-field-eng.cloud.databricks.com |

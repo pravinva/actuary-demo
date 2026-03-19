@@ -41,7 +41,7 @@ All programmatic tasks have been successfully completed. The demo is ready for p
 - Home: 8 accident years, 135 cells
 - Motor: 8 accident years, 132 cells
 
-### ✅ DLT Pipeline Deployed
+### ✅ SDP Pipeline Deployed
 
 **Pipeline Details:**
 - **Name:** actuarial_finance_serverless
@@ -59,7 +59,7 @@ All programmatic tasks have been successfully completed. The demo is ready for p
 5. ✓ `valid_lodgement` - Lodgement ≥ Accident
 6. ✓ `valid_status` - Status in (open/closed/reopened)
 
-**Note:** Gold tables are already populated via direct SQL, so DLT pipeline execution is optional for demo purposes.
+**Note:** Gold tables are already populated via direct SQL, so SDP pipeline execution is optional for demo purposes.
 
 ### ✅ Demo Files Created
 
@@ -76,7 +76,7 @@ All files ready in `/Users/pravin.varma/Documents/Demo/actuary-demo/`:
 - ✓ `genie_sample_questions.md` (3,864 bytes) - 10 pre-tested Q&A pairs with SQL
 
 **Pipeline & Scripts:**
-- ✓ `actuarial_dlt_serverless.py` (10,432 bytes) - DLT pipeline definition
+- ✓ `actuarial_dlt_serverless.py` (10,432 bytes) - SDP pipeline definition
 - ✓ `DEMO_COMPLETE.md` (13,489 bytes) - Comprehensive demo guide
 
 ---
@@ -110,7 +110,7 @@ The following steps require UI interaction and cannot be automated:
 - "What are the top 10 largest claims?"
 - "Which cohorts have loss ratios above 80%?"
 
-### 2. Create Lakeview Dashboard (10 minutes)
+### 2. Create AI/BI Dashboard (10 minutes)
 
 **Steps:**
 1. Navigate to: https://e2-demo-field-eng.cloud.databricks.com/sql/dashboards
@@ -145,7 +145,7 @@ The following steps require UI interaction and cannot be automated:
 5. **Arrange panels** in 2x2 grid
 6. **Publish** dashboard and share with demo audience
 
-### 3. (Optional) Run DLT Pipeline
+### 3. (Optional) Run SDP Pipeline
 
 To demonstrate live data flow:
 
@@ -182,8 +182,8 @@ SELECT * FROM actuary_corpfin.bronze.claims_transactions_raw LIMIT 100;
 - 37K claims with realistic actuarial patterns
 - Synthetic but actuarially sound
 
-### Act 3: DLT Pipeline with DQ (7 min)
-**Show DLT Pipeline:**
+### Act 3: SDP Pipeline with DQ (7 min)
+**Show SDP Pipeline:**
 - Navigate to pipeline URL
 - Show serverless auto-scaling
 - Highlight 6 data quality expectations
@@ -195,7 +195,7 @@ SELECT * FROM actuary_corpfin.bronze.claims_transactions_raw LIMIT 100;
 - Quarantine gives actuaries visibility
 
 ### Act 4: Analytics Dashboard (8 min)
-**Open Lakeview Dashboard:**
+**Open AI/BI Dashboard:**
 
 **Panel 1 - Development Triangles:**
 - "Reserve development by accident year"
@@ -287,7 +287,7 @@ All files in: `/Users/pravin.varma/Documents/Demo/actuary-demo/`
 - `genie_instructions.md`
 - `genie_sample_questions.md`
 
-**DLT:**
+**SDP:**
 - `actuarial_dlt_serverless.py`
 - `deploy_dlt_serverless.py`
 
@@ -337,13 +337,13 @@ databricks sql execute -w 4b9b953939869799 \
 - [x] IFRS 17 cohorts created (522 cohorts)
 - [x] Dashboard SQL queries created (4 files ready)
 - [x] Genie documentation complete (2 files, 30+ questions)
-- [x] DLT pipeline deployed (serverless, ID: 2a52433e-beb8-446d-9091-e40854f9bd88)
+- [x] SDP pipeline deployed (serverless, ID: 2a52433e-beb8-446d-9091-e40854f9bd88)
 - [x] Unity Catalog metadata enriched
 - [x] Time travel validated (Delta versions preserved)
 - [x] End-to-end demo flow documented
 - [ ] **Manual:** Create Genie Space via UI
-- [ ] **Manual:** Create Lakeview Dashboard via UI
-- [ ] **Optional:** Run DLT pipeline for live demo
+- [ ] **Manual:** Create AI/BI dashboard via UI
+- [ ] **Optional:** Run SDP pipeline for live demo
 
 ---
 
@@ -353,4 +353,4 @@ All programmatic tasks complete. Ready for presentation after manual UI steps (G
 
 ---
 
-*Built with Databricks Unity Catalog, Delta Lake, DLT, and Genie*
+*Built with Databricks Unity Catalog, Delta Lake, Spark Declarative Pipelines, and Genie*

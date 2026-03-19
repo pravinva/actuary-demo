@@ -164,7 +164,7 @@ Print it on presentation materials or display during demos.
 | **Interactive Dashboard** | https://pravinva.github.io/actuary-demo/ |
 | **GitHub Repo** | https://github.com/pravinva/actuary-demo |
 | **Databricks Workspace** | https://e2-demo-field-eng.cloud.databricks.com |
-| **DLT Pipeline** | https://e2-demo-field-eng.cloud.databricks.com/#joblist/pipelines/2a52433e-beb8-446d-9091-e40854f9bd88 |
+| **SDP Pipeline** | https://e2-demo-field-eng.cloud.databricks.com/#joblist/pipelines/2a52433e-beb8-446d-9091-e40854f9bd88 |
 | **Catalog** | actuary_corpfin |
 | **Warehouse** | 4b9b953939869799 |
 
