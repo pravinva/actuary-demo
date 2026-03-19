@@ -407,6 +407,39 @@
                     </tr>
                 </table>
 
+                <h3 style="margin-top: 28px;">Start Here: 3 Reporting Motions Mapped to Databricks</h3>
+
+                <table style="margin-top: 12px;">
+                    <tr>
+                        <th>Reporting Motion</th>
+                        <th>Business Question</th>
+                        <th>Databricks Capabilities</th>
+                        <th>What You Show in Demo</th>
+                    </tr>
+                    <tr>
+                        <td><strong>APRA / IFRS17 Reporting</strong></td>
+                        <td>"Can we produce and prove the filed numbers?"</td>
+                        <td>Unity Catalog governance + Delta time travel + lineage + DLT quality enforcement</td>
+                        <td>IFRS17 cohorts, History tab, Lineage graph, DLT event log, reproducible point-in-time SQL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Board / Executive Reporting</strong></td>
+                        <td>"Where is risk building and what is the movement story?"</td>
+                        <td>Single governed Gold layer + Lakeview dashboards + fast SQL against Delta</td>
+                        <td>Large loss register, reserve movement by product/state, KPI counters, donut/risk mix visuals</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reserve Monitoring (Intra-quarter)</strong></td>
+                        <td>"What changed now that requires action before close?"</td>
+                        <td>DLT pipeline refresh + expectation checks + Genie NLQ over governed tables</td>
+                        <td>RAG alerts, deterioration shifts, anomaly queries, natural-language follow-up questions</td>
+                    </tr>
+                </table>
+
+                <div class="talk-script">
+                    <p>"If you remember one thing: this is not three separate tools. Databricks provides one governed data foundation, then three consumption patterns on top of it - regulatory evidence, executive decisions, and operational reserve actions."</p>
+                </div>
+
                 <div class="tips" style="margin-top: 25px;">
                     <h4>If You're Not an Actuary: 60-Second Cheat Sheet</h4>
                     <ul>
