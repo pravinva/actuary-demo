@@ -1955,6 +1955,53 @@ LIMIT 10;</pre>
                         <p><strong>This entire analysis took 30 seconds.</strong> No manual Excel comparison. No risk of copy/paste errors. Just query two time periods and diff them."</p>
                     </div>
                 </div>
+
+                <div class="solution-box">
+                    <h4>Solution 3: Time Travel vs SCD2 + Long-Term Audit Retention</h4>
+
+                    <div class="talk-script">
+                        <p>"One quick clarification auditors and architects often ask: is time travel the same as SCD2? They are complementary, not the same."</p>
+                    </div>
+
+                    <table style="margin: 15px 0; font-size: 0.9em;">
+                        <tr>
+                            <th>Capability</th>
+                            <th>What It Tracks</th>
+                            <th>Best Use</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Delta Time Travel</strong></td>
+                            <td>Whole table state at version/timestamp</td>
+                            <td>Reproduce "what we submitted" for audit and regulatory evidence</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SCD2</strong></td>
+                            <td>Business entity history with effective_from/effective_to</td>
+                            <td>Track dimensional changes (for example, policy attributes changing over time)</td>
+                        </tr>
+                    </table>
+
+                    <div class="talk-script">
+                        <p>"Important operational point: Delta time travel has retention windows. For APRA-style long-term evidence, we keep explicit audit snapshots."</p>
+                    </div>
+
+                    <div class="code-block">
+<pre>-- Long-term audit pattern (append-only snapshots)
+INSERT INTO actuary_corpfin.audit.ifrs17_snapshot
+SELECT
+  current_timestamp()              AS snapshot_ts,
+  '2026Q1'                         AS reporting_period,
+  cohort_id, policy_count, gross_written_premium,
+  incurred_claims_ytd, loss_ratio, loss_ratio_flag
+FROM actuary_corpfin.gold.ifrs17_cohorts;
+
+-- Optional: store submission manifest/checksums in a separate audit table</pre>
+                    </div>
+
+                    <div class="talk-script">
+                        <p>"So our model is: time travel for fast reproducibility, SCD2 for business-record history, and append-only audit snapshots for long-term regulatory retention."</p>
+                    </div>
+                </div>
             </div>
 
             <!-- WRAP-UP -->
@@ -2032,8 +2079,8 @@ LIMIT 10;</pre>
                     <tr>
                         <td><strong>Audit/Compliance</strong></td>
                         <td>Manual SAS dataset snapshots<br>triangle_q3_2025_FINAL_v2</td>
-                        <td>Automatic time travel<br>TIMESTAMP AS OF '2025-09-30'</td>
-                        <td>Guaranteed reproducibility</td>
+                        <td>Time travel + SCD2 + long-term audit snapshots</td>
+                        <td>Guaranteed reproducibility + durable retention</td>
                     </tr>
                     <tr>
                         <td><strong>Scalability</strong></td>
