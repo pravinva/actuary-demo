@@ -344,7 +344,7 @@
 
                 <div class="tips" style="margin-top: 15px;">
                     <h4>Strong Opening Script (Use This Verbatim)</h4>
-                    <p>"Today is about replacing fragmented SAS + Excel workflows with one governed operating model. Unity Catalog governs the data, DLT enforces quality, Delta gives reproducibility through time travel, and Lakeview plus Genie turn that same data into executive decisions and actuarial action. So every number you report, discuss, or monitor comes from the same trusted source."</p>
+                    <p>"Today is about replacing fragmented SAS + Excel workflows with one governed operating model. Unity Catalog governs the data, SDP enforces quality, Delta gives reproducibility through time travel, and AI/BI dashboards plus Genie turn that same data into executive decisions and actuarial action. So every number you report, discuss, or monitor comes from the same trusted source."</p>
                 </div>
 
                 <h3>Setup: What You're Going to See</h3>
@@ -423,19 +423,19 @@
                     <tr>
                         <td><strong>APRA / IFRS17 Reporting</strong></td>
                         <td>"Can we produce and prove the filed numbers?"</td>
-                        <td>Unity Catalog governance + Delta time travel + lineage + DLT quality enforcement</td>
-                        <td>IFRS17 cohorts, History tab, Lineage graph, DLT event log, reproducible point-in-time SQL</td>
+                        <td>Unity Catalog governance + Delta time travel + lineage + SDP quality enforcement</td>
+                        <td>IFRS17 cohorts, History tab, Lineage graph, SDP event log, reproducible point-in-time SQL</td>
                     </tr>
                     <tr>
                         <td><strong>Board / Executive Reporting</strong></td>
                         <td>"Where is risk building and what is the movement story?"</td>
-                        <td>Single governed Gold layer + Lakeview dashboards + fast SQL against Delta</td>
+                        <td>Single governed Gold layer + AI/BI dashboards + fast SQL against Delta</td>
                         <td>Large loss register, reserve movement by product/state, KPI counters, donut/risk mix visuals</td>
                     </tr>
                     <tr>
                         <td><strong>Reserve Monitoring (Intra-quarter)</strong></td>
                         <td>"What changed now that requires action before close?"</td>
-                        <td>DLT pipeline refresh + expectation checks + Genie NLQ over governed tables</td>
+                        <td>SDP pipeline refresh + expectation checks + Genie NLQ over governed tables</td>
                         <td>RAG alerts, deterioration shifts, anomaly queries, natural-language follow-up questions</td>
                     </tr>
                 </table>
@@ -470,7 +470,7 @@
                             <td>Risk/compliance leaders, auditors, data engineers, analytics owners</td>
                         </tr>
                         <tr>
-                            <td><strong>DLT (Delta Live Tables)</strong></td>
+                            <td><strong>SDP (Spark Declarative Pipelines)</strong></td>
                             <td>The production pipeline layer: continuously transforms source data into trusted reporting tables with built-in quality checks.</td>
                             <td>Data engineers (build), actuaries/analysts (consume trusted outputs), control owners (review quality)</td>
                         </tr>
@@ -480,7 +480,7 @@
                             <td>Actuaries, finance analysts, auditors, data engineers</td>
                         </tr>
                         <tr>
-                            <td><strong>Lakeview Dashboard</strong></td>
+                            <td><strong>AI/BI Dashboard</strong></td>
                             <td>The executive decision layer: curated KPI and risk visuals for board packs and management review.</td>
                             <td>CFO/board stakeholders, finance leaders, actuarial managers</td>
                         </tr>
@@ -492,7 +492,7 @@
                     </table>
 
                     <div class="talk-script">
-                        <p>"Simple framing: Unity Catalog governs, DLT prepares, Delta preserves, Lakeview communicates, Genie answers."</p>
+                        <p>"Simple framing: Unity Catalog governs, SDP prepares, Delta preserves, AI/BI communicates, Genie answers."</p>
                     </div>
                 </div>
             </div>
@@ -525,7 +525,7 @@
                     <h4>Why Databricks Is Better Here (vs SAS + Excel)</h4>
                     <ul>
                         <li><strong>Legacy workflow:</strong> run SAS jobs, export files, and manually reconcile report versions.</li>
-                        <li><strong>Databricks capability:</strong> governed Unity Catalog tables, DLT quality controls, lineage, and time travel in one platform.</li>
+                        <li><strong>Databricks capability:</strong> governed Unity Catalog tables, SDP quality controls, lineage, and time travel in one platform.</li>
                         <li><strong>Business outcome:</strong> faster submissions, reproducible audit evidence, and lower compliance risk.</li>
                     </ul>
                 </div>
@@ -554,7 +554,7 @@ LIMIT 20</pre>
                     <div class="talk-script">
                         <p>"We've created <span class="highlight">522 cohorts</span> - grouped by inception quarter, exactly how APRA wants it.</p>
                         <p><span class="highlight">467 cohorts are flagged 'ABOVE_100'</span> - meaning loss ratio over 100%. Those need reserve strengthening, and APRA wants to see them highlighted in your submission.</p>
-                        <p>The SQL is straightforward. The Databricks value is the platform around it: this table is governed in Unity Catalog, fed by DLT quality checks, and fully lineage-traceable for audit.</p>
+                        <p>The SQL is straightforward. The Databricks value is the platform around it: this table is governed in Unity Catalog, fed by SDP quality checks, and fully lineage-traceable for audit.</p>
                         <p>That means when APRA asks for evidence, you can show where every number came from, who changed what, and reproduce the exact submission state with time travel. Export to Excel, attach to APRA portal, done."</p>
                     </div>
                 </div>
@@ -605,7 +605,7 @@ WHERE product = 'CTP' AND state = 'NSW'</pre>
                             ├─ Source: Claims management system<br>
                             └─ Contains: claim_id, accident_date, incurred_cumulative, paid_cumulative<br>
                         <br>
-                        <strong style="color: var(--sc-green-mid);">↓ DLT Pipeline with 6 DQ Expectations ↓</strong><br>
+                        <strong style="color: var(--sc-green-mid);">↓ SDP Pipeline with 6 DQ Expectations ↓</strong><br>
                         <br>
                         <strong>Silver Layer (Validated):</strong><br>
                         ┌─ actuary_corpfin.silver.policy_inforce (~9,800 rows)<br>
@@ -652,7 +652,7 @@ WHERE product = 'CTP' AND state = 'NSW'</pre>
                     <h4>Solution 4: Audit Trail - Proving Controls Operate</h4>
                     <div class="talk-script">
                         <p>"Final piece: 'Are your data quality controls operating?'"</p>
-                        <p><em>[Navigate to DLT Pipeline > Event Log]</em></p>
+                        <p><em>[Navigate to SDP Pipeline > Event Log]</em></p>
                         <p>"Every pipeline run is logged:"</p>
                     </div>
 
@@ -792,7 +792,7 @@ LIMIT 10</pre>
                     <h4>Why Databricks Is Better Here (vs SAS + Excel)</h4>
                     <ul>
                         <li><strong>Legacy workflow:</strong> deterioration is discovered late because reserve views refresh in overnight/month-end cycles.</li>
-                        <li><strong>Databricks capability:</strong> event-driven DLT refresh and governed analytics tables available continuously.</li>
+                        <li><strong>Databricks capability:</strong> event-driven SDP refresh and governed analytics tables available continuously.</li>
                         <li><strong>Business outcome:</strong> earlier intervention on RED segments before month-end surprises.</li>
                     </ul>
                 </div>
@@ -963,7 +963,7 @@ ORDER BY accident_year, dev_period;</pre>
 
                     <div class="talk-script">
                         <ul>
-                            <li><strong>Data flow:</strong> New claim lands in Bronze → DLT detects → Silver validates → Gold recalculates automatically</li>
+                            <li><strong>Data flow:</strong> New claim lands in Bronze → SDP detects → Silver validates → Gold recalculates automatically</li>
                             <li><strong>Runtime:</strong> Triangle refreshes in <strong>seconds</strong>, not hours</li>
                             <li><strong>Query performance:</strong> Sub-second response on 37,000 claims (scales to millions)</li>
                             <li><strong>Frequency:</strong> Real-time - refreshes as data arrives</li>
@@ -1141,7 +1141,7 @@ LIMIT 10</pre>
                 <h2>Problem 4: Data Quality & Trust <span class="timing">5 minutes</span></h2>
 
                 <div class="screen-indicator">
-                    <strong>SCREEN:</strong> DLT Pipeline + SQL Editor
+                    <strong>SCREEN:</strong> SDP Pipeline + SQL Editor
                 </div>
 
                 <div class="problem-box">
@@ -1161,7 +1161,7 @@ LIMIT 10</pre>
 
                     <div class="talk-script">
                         <p>"Let me show you how data quality works on Databricks. We've embedded 6 DQ expectations directly in the pipeline code. This isn't an external script - it's part of the transformation itself."</p>
-                        <p><em>[Navigate to DLT Pipeline → Event Log]</em></p>
+                        <p><em>[Navigate to SDP Pipeline → Event Log]</em></p>
                     </div>
 
                     <h4 style="margin-top: 25px; color: var(--text);">Policy Data Quality Rules (3 expectations)</h4>
@@ -1219,7 +1219,7 @@ LIMIT 10</pre>
                     </div>
 
                     <div class="code-block">
-<pre># This is the actual DLT pipeline code
+<pre># This is the actual SDP pipeline code
 
 @dlt.table(name="policy_inforce")
 @dlt.expect_or_drop("valid_dates", "expiry_date > inception_date")
@@ -1270,7 +1270,7 @@ LIMIT 10</pre>
                     </div>
 
                     <div class="code-block">
-<pre># The quarantine table is defined in the DLT pipeline
+<pre># The quarantine table is defined in the SDP pipeline
 
 @dlt.table(name="claims_dq_quarantine")
 def claims_dq_quarantine():
@@ -1353,7 +1353,7 @@ ORDER BY accident_year DESC;
                         <p><strong>How does this work?</strong></p>
                         <ul>
                             <li>Claim lands in Bronze table (event trigger)</li>
-                            <li>DLT pipeline detects new data automatically</li>
+                            <li>SDP pipeline detects new data automatically</li>
                             <li>Silver validates with DQ expectations</li>
                             <li>Gold recalculates affected triangle cells</li>
                             <li>Actuary queries - sees fresh data</li>
@@ -1373,7 +1373,7 @@ ORDER BY accident_year DESC;
                         <tr>
                             <td>Build development triangle (37K claims)</td>
                             <td>4-8 hours (overnight PROC TABULATE)</td>
-                            <td>2-5 seconds (DLT pipeline)</td>
+                            <td>2-5 seconds (SDP pipeline)</td>
                             <td><strong>7,200x faster</strong></td>
                         </tr>
                         <tr>
@@ -1922,7 +1922,7 @@ ORDER BY accident_year DESC;</pre>
                             <li>The version history showing the timestamp</li>
                             <li>The query result with exact numbers</li>
                             <li>The lineage showing how it was calculated</li>
-                            <li>The DLT event log showing the pipeline ran successfully before submission</li>
+                            <li>The SDP event log showing the pipeline ran successfully before submission</li>
                         </ol>
                         <p>Complete audit trail with zero manual work."</p>
                     </div>
@@ -2155,7 +2155,7 @@ FROM actuary_corpfin.gold.ifrs17_cohorts;
                     <tr>
                         <td><strong>Data Quality</strong></td>
                         <td>External SAS scripts<br>Can be skipped</td>
-                        <td>Embedded DLT expectations<br>Cannot be bypassed</td>
+                        <td>Embedded SDP expectations<br>Cannot be bypassed</td>
                         <td>100% DQ enforcement</td>
                     </tr>
                     <tr>
@@ -2188,7 +2188,7 @@ FROM actuary_corpfin.gold.ifrs17_cohorts;
                     <p><strong>What Databricks delivers for Finance Actuarial outcomes:</strong></p>
                     <ul>
                         <li><strong>Speed:</strong> 4-8 hour SAS batch jobs → sub-second Databricks queries (1000x faster)</li>
-                        <li><strong>Trust:</strong> Embedded DQ in DLT pipeline (cannot be bypassed like SAS scripts), quarantine pattern, complete lineage</li>
+                        <li><strong>Trust:</strong> Embedded DQ in SDP pipeline (cannot be bypassed like SAS scripts), quarantine pattern, complete lineage</li>
                         <li><strong>Compliance:</strong> Delta Lake time travel replaces manual SAS snapshots - automatic versioning for APRA audit</li>
                         <li><strong>Self-Service:</strong> Genie natural language replaces SAS programming barrier - actuaries ask questions, no IT tickets</li>
                         <li><strong>Scalability:</strong> Serverless auto-scaling eliminates SAS batch window constraints</li>
@@ -2246,7 +2246,7 @@ FROM actuary_corpfin.gold.ifrs17_cohorts;
                             <li><strong>Reinsurance Platform</strong> - treaty data → Bronze via API or file</li>
                             <li><strong>Finance/Treasury</strong> - risk-free rate curves → Bronze via scheduled job</li>
                         </ol>
-                        <p>DLT handles all ingestion patterns. We can connect to your existing systems without replacing them."</p>
+                        <p>SDP handles all ingestion patterns. We can connect to your existing systems without replacing them."</p>
                     </div>
                 </div>
 
